@@ -1,3 +1,6 @@
+import './module';
 import './scss/index.scss';
 
-console.log('project is work!'); // fixme
+console.log('==> index.js!'); // fixme
+
+start();

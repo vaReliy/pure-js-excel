@@ -2,6 +2,7 @@
   "name": "pure-js-excel",
   "version": "1.0.0",
   "description": "Pure JS Excel project (education project)",
+  "browserslist": "> 0.25%, not dead",
   "main": "index.js",
   "scripts": {
     "start": "webpack",
@@ -23,6 +24,9 @@
   },
   "homepage": "https://github.com/vaReliy/pure-js-excel#readme",
   "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.0.3",
     "css-loader": "^3.6.0",
