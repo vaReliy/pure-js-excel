@@ -1,6 +1,7 @@
 console.log('==> module.js!'); // fixme
 
 async function start() {
-  return new Promise.resolve();
+  return Promise.resolve('=> async working!');
 }
 
+start().then(console.log);
