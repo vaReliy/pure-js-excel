@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
-const filename = ext => isProd ? `bundle.${ext}` : `bundle.[hash].${ext}`;
+const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`;
 
 
 module.exports = {
@@ -24,7 +24,13 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: isDev,
+              reloadAll: true,
+            },
+          },
           'css-loader',
           'sass-loader',
         ],
