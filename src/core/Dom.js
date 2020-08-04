@@ -14,7 +14,7 @@ class Dom {
   }
 
   clear() {
-    this.$nativeElement.innerHTML = '';
+    this.html('');
     return this;
   }
 
@@ -31,6 +31,10 @@ class Dom {
 
     return this;
   }
+
+  on(eventType, callback) {
+    this.$nativeElement.addEventListener(eventType, callback);
+  }
 }
 
 export function $(selector) {
@@ -42,5 +46,5 @@ $.create = (tagName, classes = '') => {
   if (classes) {
     element.classList.add(classes);
   }
-  return element;
+  return $(element);
 };
