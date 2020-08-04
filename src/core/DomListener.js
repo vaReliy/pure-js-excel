@@ -22,17 +22,19 @@ export class DomListener {
         // eslint-disable-next-line max-len
         throw new Error(`Component ${this.name} doesn't implemented ${handlerName} handler!`);
       }
-
-      this.$root.on(eventType, this[handlerName].bind(this));
+      this[handlerName] = this[handlerName].bind(this);
+      this.$root.on(eventType, this[handlerName]);
     });
   }
 
   removeListeners() {
-    // todo implementation!
+    this.listeners.forEach(eventType => {
+      const handlerName = this.getHandlerName(eventType);
+      this.$root.off(eventType, this[handlerName]);
+    });
   }
 
   getHandlerName(eventType) {
     return 'on' + capitalize(eventType);
   }
 }
-
