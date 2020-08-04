@@ -1,0 +1,56 @@
+const CODES = {
+  A: 65,
+  Z: 90,
+  range: () => CODES.Z - CODES.A + 1,
+};
+
+function createRow(info, rowData) {
+  return `
+        <div class="row">
+            <div class="row-info">${info}</div>
+            <div class="row-data">${rowData}</div>
+        </div>
+    `;
+}
+
+function toChar(_, index) {
+  let charCode = CODES.A + index;
+  const suffix = Math.floor(index / CODES.range());
+  if (suffix) {
+    charCode = CODES.A + (index - suffix * CODES.range());
+    return String.fromCharCode(charCode) + `${suffix}`;
+  }
+  return String.fromCharCode(charCode);
+}
+
+function toColumn(data) {
+  return `<div class="column">${data}</div>`;
+}
+
+function toCell(data = '') {
+  return `<div class="cell" contenteditable="true">${data}</div>`;
+}
+
+
+export function getTemplateTable(size = 30) {
+  const rows = [];
+  const rowSize = CODES.range();
+
+  const columnHeaders = new Array(rowSize)
+      .fill('')
+      .map(toChar)
+      .map(toColumn)
+      .join('');
+
+  const columnCells = new Array(rowSize)
+      .fill('')
+      .map(toCell)
+      .join('');
+
+  rows.push(createRow('', columnHeaders));
+  for (let i = 0; i < size; i++) {
+    rows.push(createRow(`${i + 1}`, columnCells));
+  }
+
+  return rows.join('');
+}
