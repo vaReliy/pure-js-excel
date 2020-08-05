@@ -5,9 +5,13 @@ const CODES = {
 };
 
 function createRow(info, rowData) {
+  const resize = info ? '<div class="row-resize" data-resize="row"></div>' : '';
   return `
         <div class="row">
-            <div class="row-info">${info}</div>
+            <div class="row-info">
+                ${info}
+                ${resize}
+            </div>
             <div class="row-data">${rowData}</div>
         </div>
     `;
@@ -24,7 +28,12 @@ function toChar(_, index) {
 }
 
 function toColumn(data) {
-  return `<div class="column">${data}</div>`;
+  return `
+    <div class="column">
+        ${data}
+        <div class="col-resize" data-resize="column"></div>
+    </div>
+    `;
 }
 
 function toCell(data = '') {
