@@ -39,6 +39,10 @@ class Dom {
   off(eventType, callback) {
     this.$nativeElement.removeEventListener(eventType, callback);
   }
+
+  closest(selector) {
+    return $(this.$nativeElement.closest(selector));
+  }
 }
 
 export function $(selector) {

@@ -14,7 +14,7 @@ $base-width: 40px;
   .row {
     display: flex;
     flex-direction: row;
-    max-height: 20px;
+    min-height: 10px;
     height: $row-height;
   }
 
@@ -74,7 +74,7 @@ $base-width: 40px;
     background: $primary-color;
     opacity: 0;
 
-    &:hover {
+    &:hover, &:active {
       opacity: 1;
     }
   }
@@ -95,5 +95,13 @@ $base-width: 40px;
     &:hover {
       cursor: row-resize;
     }
+  }
+
+  .column-resize-active {
+    border-right: 1px solid $primary-color;
+  }
+
+  .row-resize-active {
+    border-bottom: 1px solid $primary-color;
   }
 }
