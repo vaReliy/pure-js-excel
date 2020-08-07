@@ -29,15 +29,20 @@ export class Table extends ExcelComponent {
       const $cells = document.querySelectorAll(targetCellAttribute);
       const resizeProgressClass = `${resizeTarget}-resize-active`;
 
+      $parent.classList.add(resizeProgressClass);
+      if (isColumn) {
+        $cells.forEach(cell => {
+          cell.classList.add(resizeProgressClass);
+        });
+      }
+
       document.onmousemove = event => {
         let delta;
-        $parent.classList.add(resizeProgressClass);
         if (isColumn) {
           delta = event.clientX - rect.right;
           const widthValue = `${rect.width + delta}px`;
           $parent.style.width = widthValue;
           $cells.forEach(cell => {
-            cell.classList.add(resizeProgressClass);
             cell.style.width = widthValue;
           });
         } else {
