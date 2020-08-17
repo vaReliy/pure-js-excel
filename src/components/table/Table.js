@@ -17,46 +17,48 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(event) {
-    const resizeTarget = event.target.dataset.resize;
+    const $resizer = $(event.target);
+    const resizeTarget =$resizer.data.resize;
     if (resizeTarget) {
-      const $parent = $(event.target)
-          .closest('[data-resizable]')
-          .$nativeElement;
+      const $parent = $resizer.closest('[data-resizable]');
       const isColumn = resizeTarget === 'column';
-      const rect = $parent.getBoundingClientRect();
-      const parentId = $parent.innerText.toLowerCase();
+      const rect = $parent.boundingClientRect;
+      const parentId = $parent.text.toLowerCase();
       const targetCellAttribute = `[data-resizable-${parentId}]`;
-      const $cells = document.querySelectorAll(targetCellAttribute);
-      const resizeProgressClass = `${resizeTarget}-resize-active`;
+      const resizerCssProp = isColumn ? 'right' : 'bottom';
 
-      $parent.classList.add(resizeProgressClass);
-      if (isColumn) {
-        $cells.forEach(cell => {
-          cell.classList.add(resizeProgressClass);
-        });
-      }
-
+      let delta;
+      let widthValue;
       document.onmousemove = event => {
-        let delta;
         if (isColumn) {
           delta = event.clientX - rect.right;
-          const widthValue = `${rect.width + delta}px`;
-          $parent.style.width = widthValue;
-          $cells.forEach(cell => {
-            cell.style.width = widthValue;
-          });
+          widthValue = `${rect.width + delta}px`;
         } else {
           delta = event.clientY - rect.bottom;
-          $parent.style.height = `${rect.height + delta}px`;
         }
+        $resizer.css({
+          [resizerCssProp]: `${-delta}px`,
+        });
       };
 
       document.onmouseup = () => {
-        $parent.classList.remove(resizeProgressClass);
-        $cells.forEach(cell => {
-          cell.classList.remove(resizeProgressClass);
+        if (isColumn) {
+          $parent.css({
+            width: widthValue,
+          });
+          document.querySelectorAll(targetCellAttribute).forEach(cell => {
+            cell.style.width = widthValue;
+          });
+        } else {
+          $parent.css({
+            height: `${rect.height + delta}px`,
+          });
+        }
+        $resizer.css({
+          [resizerCssProp]: 0,
         });
         document.onmousemove = null;
+        document.onmouseup = null;
       };
     }
   }

@@ -75,10 +75,19 @@ $base-width: 40px;
     bottom: 0;
     background: $primary-color;
     opacity: 0;
+    z-index: 1000;
 
     &:hover, &:active {
       opacity: 1;
     }
+  }
+
+  .col-resize:active {
+    bottom: -5000px!important;
+  }
+
+  .row-resize:active {
+    right: -5000px!important;
   }
 
   .col-resize {
@@ -97,13 +106,5 @@ $base-width: 40px;
     &:hover {
       cursor: row-resize;
     }
-  }
-
-  .column-resize-active {
-    border-right: 1px solid $primary-color;
-  }
-
-  .row-resize-active {
-    border-bottom: 1px solid $primary-color;
   }
 }
