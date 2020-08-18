@@ -14,14 +14,16 @@ $base-width: 40px;
   .row {
     display: flex;
     flex-direction: row;
-    max-height: 20px;
+    min-height: 10px;
     height: $row-height;
   }
 
   .row-info {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
     min-width: $info-cell-width;
     height: 100%;
     background-color: #f8f9fa;
@@ -34,9 +36,11 @@ $base-width: 40px;
   }
 
   .column {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
     background-color: #f8f9fa;
     min-width: $base-width;
     width: $cell-width;
@@ -60,8 +64,47 @@ $base-width: 40px;
 
     &.selected {
       border: none;
-      outline: 2px solid #3c74ff;
+      outline: 2px solid $primary-color;
       z-index: 2;
+    }
+  }
+
+  .col-resize, .row-resize {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: $primary-color;
+    opacity: 0;
+    z-index: 1000;
+
+    &:hover, &:active {
+      opacity: 1;
+    }
+  }
+
+  .col-resize:active {
+    bottom: -5000px!important;
+  }
+
+  .row-resize:active {
+    right: -5000px!important;
+  }
+
+  .col-resize {
+    top: 0;
+    width: 4px;
+
+   &:hover {
+     cursor: col-resize;
+    }
+  }
+
+  .row-resize {
+    left: 0;
+    height: 4px;
+
+    &:hover {
+      cursor: row-resize;
     }
   }
 }

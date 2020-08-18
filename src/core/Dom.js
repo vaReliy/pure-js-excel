@@ -39,6 +39,29 @@ class Dom {
   off(eventType, callback) {
     this.$nativeElement.removeEventListener(eventType, callback);
   }
+
+  closest(selector) {
+    return $(this.$nativeElement.closest(selector));
+  }
+
+  get boundingClientRect() {
+    return this.$nativeElement.getBoundingClientRect();
+  }
+
+  get text() {
+    return this.$nativeElement.innerText;
+  }
+
+  get data() {
+    return this.$nativeElement.dataset;
+  }
+
+  css(styles = {}) {
+    Object.entries(styles).forEach(([key, value]) => {
+      this.$nativeElement.style[key] = value;
+    });
+    return this;
+  }
 }
 
 export function $(selector) {

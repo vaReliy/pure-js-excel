@@ -5,9 +5,13 @@ const CODES = {
 };
 
 function createRow(info, rowData) {
+  const resize = info ? '<div class="row-resize" data-resize="row"></div>' : '';
   return `
-        <div class="row">
-            <div class="row-info">${info}</div>
+        <div class="row" data-resizable="row">
+            <div class="row-info">
+                ${info}
+                ${resize}
+            </div>
             <div class="row-data">${rowData}</div>
         </div>
     `;
@@ -24,11 +28,17 @@ function toChar(_, index) {
 }
 
 function toColumn(data) {
-  return `<div class="column">${data}</div>`;
+  return `
+    <div class="column" data-resizable="column">
+        ${data}
+        <div class="col-resize" data-resize="column"></div>
+    </div>
+    `;
 }
 
-function toCell(data = '') {
-  return `<div class="cell" contenteditable="true">${data}</div>`;
+function toCell(columnName = '') {
+  // eslint-disable-next-line max-len
+  return `<div class="cell" contenteditable="true" data-resizable-${columnName}="cell"></div>`;
 }
 
 
@@ -44,6 +54,7 @@ export function getTemplateTable(size = 30) {
 
   const columnCells = new Array(rowSize)
       .fill('')
+      .map(toChar)
       .map(toCell)
       .join('');
 
