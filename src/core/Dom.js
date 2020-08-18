@@ -62,6 +62,18 @@ class Dom {
     });
     return this;
   }
+
+  find(selector) {
+    return $(document.querySelector(selector));
+  }
+
+  addClass(className) {
+    this.$nativeElement.classList.add(className);
+  }
+
+  removeClass(className) {
+    this.$nativeElement.classList.remove(className);
+  }
 }
 
 export function $(selector) {

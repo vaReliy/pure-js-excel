@@ -4,6 +4,10 @@ export function shouldResize(event) {
   return event.target.dataset.resize;
 }
 
+export function isCell(event) {
+  return event.target.dataset.type === 'cell';
+}
+
 export function resizeHandler(event) {
   const $resizer = $(event.target);
   const $parent = $resizer.closest('[data-resizable]');

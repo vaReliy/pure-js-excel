@@ -4,12 +4,13 @@ const CODES = {
   range: () => CODES.Z - CODES.A + 1,
 };
 
-function createRow(info, rowData) {
-  const resize = info ? '<div class="row-resize" data-resize="row"></div>' : '';
+function createRow(rowId, rowData) {
+  // eslint-disable-next-line max-len
+  const resize = rowId ? '<div class="row-resize" data-resize="row"></div>' : '';
   return `
         <div class="row" data-resizable="row">
             <div class="row-info">
-                ${info}
+                ${rowId}
                 ${resize}
             </div>
             <div class="row-data">${rowData}</div>
@@ -36,9 +37,16 @@ function toColumn(data) {
     `;
 }
 
-function toCell(columnName = '') {
-  // eslint-disable-next-line max-len
-  return `<div class="cell" contenteditable="true" data-resizable-${columnName}="cell"></div>`;
+function toCell(rowId) {
+  return columnId => {
+    return `<div
+              class="cell"
+              contenteditable="true"
+              data-resizable-${columnId}="cell"
+              data-id="${columnId}:${rowId}"
+              data-type="cell">
+          </div>`;
+  };
 }
 
 
@@ -52,15 +60,16 @@ export function getTemplateTable(size = 30) {
       .map(toColumn)
       .join('');
 
-  const columnCells = new Array(rowSize)
-      .fill('')
-      .map(toChar)
-      .map(toCell)
-      .join('');
-
   rows.push(createRow('', columnHeaders));
   for (let i = 0; i < size; i++) {
-    rows.push(createRow(`${i + 1}`, columnCells));
+    const rowId = `${i + 1}`;
+    const columnCells = new Array(rowSize)
+        .fill('')
+        .map(toChar)
+        .map(toCell(rowId))
+        .join('');
+
+    rows.push(createRow(rowId, columnCells));
   }
 
   return rows.join('');
