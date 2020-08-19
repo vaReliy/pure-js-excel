@@ -59,8 +59,12 @@ class Dom {
     return this;
   }
 
-  find(selector) {
-    return $(document.querySelector(selector));
+  findNode(selector) {
+    return $(this.$nativeElement.querySelector(selector));
+  }
+
+  findNodeList(selector) {
+    return this.$nativeElement.querySelectorAll(selector);
   }
 
   addClass(className) {

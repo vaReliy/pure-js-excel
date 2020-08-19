@@ -1,3 +1,4 @@
+import {range} from '@/utils/utils';
 import {$} from '@core/Dom';
 
 export function shouldResize(event) {
@@ -6,6 +7,17 @@ export function shouldResize(event) {
 
 export function isCell(event) {
   return event.target.dataset.type === 'cell';
+}
+
+export function cellIdMatrix(start, end) {
+  const rowsIds = range(start.row, end.row);
+  const colsIds = range(start.col, end.col);
+  return colsIds.reduce((acc, colId) => {
+    rowsIds.forEach(rowId => {
+      acc.push(`${colId}:${rowId}`);
+    });
+    return acc;
+  }, []);
 }
 
 export function resizeHandler(event) {

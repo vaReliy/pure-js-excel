@@ -1,6 +1,6 @@
 import {CellSelection} from '@/components/table/CellSelection';
 // eslint-disable-next-line max-len
-import {isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
+import {cellIdMatrix, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
 import {$} from '@core/Dom';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -23,7 +23,7 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
 
-    const defaultSelectedCell = this.$root.find('[data-id="1:1"]');
+    const defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
     this.cellSelection.select(defaultSelectedCell);
   }
 
@@ -39,7 +39,11 @@ export class Table extends ExcelComponent {
     if (isCell(event)) {
       const $target = $(event.target);
       if (event.shiftKey) {
-        this.cellSelection.selectGroup($target);
+        const start = this.cellSelection.current.getId(true);
+        const end = $target.getId(true);
+        const $groups = cellIdMatrix(start, end)
+            .map(id => this.$root.findNode(`[data-id="${id}"]`));
+        this.cellSelection.selectGroup($groups);
       } else {
         this.cellSelection.select($target);
       }
