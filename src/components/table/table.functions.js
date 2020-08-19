@@ -20,21 +20,18 @@ export function cellIdMatrix(start, end) {
   }, []);
 }
 
-export function closestCellId($cell, direction) {
-  const {col, row} = $cell.getId(true);
+export function closestCellId(direction, {col, row}) {
   switch (direction) {
     case 'Enter':
     case 'ArrowDown': {
-      return `${col}:${row + 1}`; // fixme: check max-bottom cell!
+      return `${col}:${row + 1}`;
     }
     case 'ArrowUp': {
       return `${col}:${Math.max(1, row - 1)}`;
     }
-    case 'Tab': {
-      return `${col}:${row}`;
-    }
+    case 'Tab':
     case 'ArrowRight': {
-      return `${col + 1}:${row}`; // fixme: check max-right cell!
+      return `${col + 1}:${row}`;
     }
     case 'ArrowLeft': {
       return `${Math.max(1, col - 1)}:${row}`;

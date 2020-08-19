@@ -30,7 +30,7 @@ export class CellSelection {
   }
 
   applySelect() {
-    this.group.forEach($el => $el.addClass(CellSelection.className));
+    this.group.forEach($el => $el.focus().addClass(CellSelection.className));
   }
 
   reset() {

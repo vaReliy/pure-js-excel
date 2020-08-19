@@ -59,6 +59,11 @@ class Dom {
     return this;
   }
 
+  focus() {
+    this.$nativeElement.focus();
+    return this;
+  }
+
   findNode(selector) {
     return $(this.$nativeElement.querySelector(selector));
   }
@@ -84,10 +89,6 @@ class Dom {
       };
     }
     return this.data.id;
-  }
-
-  focus() {
-    this.$nativeElement.focus();
   }
 }
 

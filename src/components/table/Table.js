@@ -51,15 +51,21 @@ export class Table extends ExcelComponent {
   }
 
   onKeyup(event) {
-    // eslint-disable-next-line max-len
-    const availableKeys = ['Enter', 'Tab', 'ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'];
-    if (availableKeys.includes(event.key)) {
+    const availableKeys = [
+      'Enter',
+      'Tab',
+      'ArrowDown',
+      'ArrowUp',
+      'ArrowRight',
+      'ArrowLeft',
+    ];
+    if (availableKeys.includes(event.key) && !event.shiftKey) {
       event.preventDefault();
-      const $target = $(event.target);
-      const id = closestCellId($target, event.key);
+      const targetCellId = this.cellSelection.current.getId(true);
+      const id = closestCellId(event.key, targetCellId);
       const $closestCell = this.$root.findNode(`[data-id="${id}"]`);
-      if ($closestCell) {
-        $closestCell.focus();
+      if ($closestCell && $closestCell.$nativeElement) {
+        // fixme: $nativeElement - check for table max cell values range
         this.cellSelection.select($closestCell);
       }
     }
