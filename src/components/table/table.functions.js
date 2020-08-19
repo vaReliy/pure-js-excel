@@ -13,7 +13,7 @@ export function resizeHandler(event) {
   const $parent = $resizer.closest('[data-resizable]');
   const isColumn = $resizer.data.resize === 'column';
   const rect = $parent.boundingClientRect;
-  const parentId = $parent.text.toLowerCase();
+  const parentId = $parent.getId();
   const targetCellAttribute = `[data-resizable-${parentId}]`;
   const resizerCssProp = isColumn ? 'right' : 'bottom';
 

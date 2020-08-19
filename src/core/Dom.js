@@ -48,10 +48,6 @@ class Dom {
     return this.$nativeElement.getBoundingClientRect();
   }
 
-  get text() {
-    return this.$nativeElement.innerText;
-  }
-
   get data() {
     return this.$nativeElement.dataset;
   }
@@ -73,6 +69,17 @@ class Dom {
 
   removeClass(className) {
     this.$nativeElement.classList.remove(className);
+  }
+
+  getId(parse) {
+    if (parse) {
+      const parsed = this.getId().split(':');
+      return {
+        col: +parsed[0],
+        row: +parsed[1],
+      };
+    }
+    return this.data.id;
   }
 }
 

@@ -23,7 +23,7 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
 
-    const defaultSelectedCell = this.$root.find('[data-id="A:1"]');
+    const defaultSelectedCell = this.$root.find('[data-id="1:1"]');
     this.cellSelection.select(defaultSelectedCell);
   }
 

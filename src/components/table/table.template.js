@@ -18,27 +18,39 @@ function createRow(rowId, rowData) {
     `;
 }
 
+/**
+ * @param {Object} _
+ * @param {number} index
+ * @return {{char: string, index: number}}
+ */
 function toChar(_, index) {
   let charCode = CODES.A + index;
+  const result = {
+    index,
+    char: '',
+  };
   const suffix = Math.floor(index / CODES.range());
   if (suffix) {
     charCode = CODES.A + (index - suffix * CODES.range());
-    return String.fromCharCode(charCode) + `${suffix}`;
+    result.char = String.fromCharCode(charCode) + `${suffix}`;
+  } else {
+    result.char = String.fromCharCode(charCode);
   }
-  return String.fromCharCode(charCode);
+  return result;
 }
 
-function toColumn(data) {
+function toColumn({index, char}) {
   return `
-    <div class="column" data-resizable="column">
-        ${data}
+    <div class="column" data-id="${index + 1}" data-resizable="column">
+        ${char}
         <div class="col-resize" data-resize="column"></div>
     </div>
     `;
 }
 
 function toCell(rowId) {
-  return columnId => {
+  return ({index, char}) => {
+    const columnId = index + 1;
     return `<div
               class="cell"
               contenteditable="true"
