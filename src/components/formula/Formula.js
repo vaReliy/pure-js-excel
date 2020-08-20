@@ -1,17 +1,20 @@
+import {$} from '@core/Dom';
 import {ExcelComponent} from '@core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
   static className = 'excel__formula';
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Formula',
       listeners: ['input', 'click'],
+      ...options,
     });
   }
 
   onInput(event) {
-    console.log('Formula onInput()', event); // fixme
+    const text = $(event.target).text();
+    this.emitter.emit('formula:input', text);
   }
 
   onClick(event) {

@@ -8,10 +8,11 @@ import {ExcelComponent} from '@core/ExcelComponent';
 export class Table extends ExcelComponent {
   static className = 'excel__table';
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Table',
       listeners: ['mousedown', 'keyup'],
+      ...options,
     });
   }
 
@@ -25,6 +26,13 @@ export class Table extends ExcelComponent {
 
     const defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
     this.cellSelection.select(defaultSelectedCell);
+
+    this.subscriptions.push(
+        this.emitter.subscribe(
+            'formula:input',
+            this.onFormulaUpdate.bind(this),
+        ),
+    );
   }
 
   toHTML() {
@@ -69,5 +77,9 @@ export class Table extends ExcelComponent {
         this.cellSelection.select($closestCell);
       }
     }
+  }
+
+  onFormulaUpdate(text) {
+    this.cellSelection.current.html(text);
   }
 }

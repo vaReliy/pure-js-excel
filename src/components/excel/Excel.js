@@ -1,4 +1,5 @@
 import {$} from '@core/Dom';
+import {EventEmitter} from '@core/EventEmitter';
 
 export class Excel {
   constructor(selector, options) {
@@ -9,9 +10,13 @@ export class Excel {
   getRoot() {
     const $root = $.create('div', 'excel');
 
+    const options = {
+      emitter: new EventEmitter(),
+    };
+
     this.components = this.components.map(Component => {
       const $el = $.create('div', Component.className);
-      const component = new Component($el);
+      const component = new Component($el, options);
       $el.html(component.toHTML());
       $root.append($el);
       return component;
