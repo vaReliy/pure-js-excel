@@ -82,10 +82,12 @@ class Dom {
 
   addClass(className) {
     this.$nativeElement.classList.add(className);
+    return this;
   }
 
   removeClass(className) {
     this.$nativeElement.classList.remove(className);
+    return this;
   }
 
   getId(parse) {

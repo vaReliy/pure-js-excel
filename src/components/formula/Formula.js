@@ -1,4 +1,5 @@
 import {$} from '@core/Dom';
+import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
@@ -15,20 +16,20 @@ export class Formula extends ExcelComponent {
   init() {
     super.init();
 
-    this.$on('table:cell_update', this.onCellUpdate.bind(this));
+    this.$on(EventType.TABLE.UPDATE, this.onCellUpdate.bind(this));
   }
 
   onInput(event) {
     const text = $(event.target).text();
     this.onCellUpdate(text);
-    this.$emit('formula:input', text);
+    this.$emit(EventType.FORMULA.INPUT, text);
   }
 
   onKeydown(event) {
-    const {key} = event;
-    if (key === 'Enter') {
+    const keys = ['Enter', 'Tab'];
+    if (keys.includes(event.key)) {
       event.preventDefault();
-      this.$emit('formula:complete');
+      this.$emit(EventType.FORMULA.DONE);
     }
   }
 

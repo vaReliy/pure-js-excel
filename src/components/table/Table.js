@@ -3,6 +3,7 @@ import {CellSelection} from '@/components/table/CellSelection';
 import {cellIdMatrix, closestCellId, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
 import {$} from '@core/Dom';
+import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
 
 export class Table extends ExcelComponent {
@@ -11,7 +12,7 @@ export class Table extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'keydown'],
+      listeners: ['mousedown', 'keydown', 'input'],
       ...options,
     });
   }
@@ -24,11 +25,11 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
 
-    const defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
-    this.cellSelection.select(defaultSelectedCell);
+    const $defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
+    this.selectCellUpdate($defaultSelectedCell);
 
-    this.$on('formula:input', this.onFormulaUpdate.bind(this));
-    this.$on('formula:complete', this.onFormulaComplete.bind(this));
+    this.$on(EventType.FORMULA.INPUT, this.onFormulaUpdate.bind(this));
+    this.$on(EventType.FORMULA.DONE, this.onFormulaDone.bind(this));
   }
 
   toHTML() {
@@ -75,16 +76,20 @@ export class Table extends ExcelComponent {
     }
   }
 
+  onInput(event) {
+    this.$emit(EventType.TABLE.UPDATE, $(event.target).text());
+  }
+
   onFormulaUpdate(text) {
     this.cellSelection.current.text(text);
   }
 
-  onFormulaComplete() {
+  onFormulaDone() {
     this.cellSelection.current.focus();
   }
 
   selectCellUpdate($cell) {
     this.cellSelection.select($cell);
-    this.$emit('table:cell_update', $cell.text());
+    this.$emit(EventType.TABLE.UPDATE, $cell.text());
   }
 }
