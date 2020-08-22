@@ -1,7 +1,42 @@
+import {range} from '@/utils/utils';
 import {$} from '@core/Dom';
 
 export function shouldResize(event) {
   return event.target.dataset.resize;
+}
+
+export function isCell(event) {
+  return event.target.dataset.type === 'cell';
+}
+
+export function cellIdMatrix(start, end) {
+  const rowsIds = range(start.row, end.row);
+  const colsIds = range(start.col, end.col);
+  return colsIds.reduce((acc, colId) => {
+    rowsIds.forEach(rowId => {
+      acc.push(`${colId}:${rowId}`);
+    });
+    return acc;
+  }, []);
+}
+
+export function closestCellId(direction, {col, row}) {
+  switch (direction) {
+    case 'Enter':
+    case 'ArrowDown': {
+      return `${col}:${row + 1}`;
+    }
+    case 'ArrowUp': {
+      return `${col}:${Math.max(1, row - 1)}`;
+    }
+    case 'Tab':
+    case 'ArrowRight': {
+      return `${col + 1}:${row}`;
+    }
+    case 'ArrowLeft': {
+      return `${Math.max(1, col - 1)}:${row}`;
+    }
+  }
 }
 
 export function resizeHandler(event) {
@@ -9,7 +44,7 @@ export function resizeHandler(event) {
   const $parent = $resizer.closest('[data-resizable]');
   const isColumn = $resizer.data.resize === 'column';
   const rect = $parent.boundingClientRect;
-  const parentId = $parent.text.toLowerCase();
+  const parentId = $parent.getId();
   const targetCellAttribute = `[data-resizable-${parentId}]`;
   const resizerCssProp = isColumn ? 'right' : 'bottom';
 
