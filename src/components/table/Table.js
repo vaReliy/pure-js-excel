@@ -2,6 +2,7 @@ import {CellSelection} from '@/components/table/CellSelection';
 // eslint-disable-next-line max-len
 import {cellIdMatrix, closestCellId, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
+import {actionTableResize} from '@/redux/actions';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -30,15 +31,26 @@ export class Table extends ExcelComponent {
 
     this.$on(EventType.FORMULA.INPUT, this.onFormulaUpdate.bind(this));
     this.$on(EventType.FORMULA.DONE, this.onFormulaDone.bind(this));
+
+    // this.$subscribe(state => console.log('TABLE:', state)); // fixme
   }
 
   toHTML() {
     return getTemplateTable();
   }
 
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(event);
+      this.$dispatch(actionTableResize(data));
+    } catch (e) {
+      console.warn(e.message);
+    }
+  }
+
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeHandler(event);
+      this.resizeTable(event);
     }
 
     if (isCell(event)) {

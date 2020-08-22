@@ -17,6 +17,7 @@ export class Formula extends ExcelComponent {
     super.init();
 
     this.$on(EventType.TABLE.UPDATE, this.onCellUpdate.bind(this));
+    // this.$subscribe(state => console.log('FORMULA:', state)); // fixme
   }
 
   onInput(event) {

@@ -13,3 +13,10 @@ export function range(start, end) {
       .fill(0)
       .map((v, i) => min + i);
 }
+
+export function storage(key, data) {
+  if (!data) {
+    return JSON.parse(localStorage.getItem(key));
+  }
+  localStorage.setItem(key, JSON.stringify(data));
+}

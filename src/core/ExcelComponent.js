@@ -11,6 +11,8 @@ export class ExcelComponent extends DomListener {
     this.name = options.name;
     /** @type {EventEmitter} */
     this.emitter = options.emitter;
+    /** @type Store */
+    this.store = options.store;
     /** @type {Array<Function>} */
     this.subscriptions = [];
 
@@ -24,6 +26,14 @@ export class ExcelComponent extends DomListener {
   $on(eventType, handler) {
     const sub = this.emitter.subscribe(eventType, handler);
     this.subscriptions.push(sub);
+  }
+
+  $dispatch(action) {
+    this.store.dispatch(action);
+  }
+
+  $subscribe(handler) {
+    this.store.subscribe(handler);
   }
 
   beforeInit() {}

@@ -8,7 +8,7 @@ function createRow(rowId, rowData) {
   // eslint-disable-next-line max-len
   const resize = rowId ? '<div class="row-resize" data-resize="row"></div>' : '';
   return `
-        <div class="row" data-resizable="row">
+        <div class="row" data-id="${rowId}" data-resizable="row">
             <div class="row-info">
                 ${rowId}
                 ${resize}
