@@ -9,7 +9,9 @@ export class DomListener {
     if (!$root) {
       throw new Error('The $root element is not provided!');
     }
+    /** @type {Dom} */
     this.$root = $root;
+    /** @type {Array<string>} */
     this.listeners = listeners;
     this.name = '';
   }

@@ -11,7 +11,7 @@ export class Table extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'keyup'],
+      listeners: ['mousedown', 'keydown'],
       ...options,
     });
   }
@@ -27,12 +27,8 @@ export class Table extends ExcelComponent {
     const defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
     this.cellSelection.select(defaultSelectedCell);
 
-    this.subscriptions.push(
-        this.emitter.subscribe(
-            'formula:input',
-            this.onFormulaUpdate.bind(this),
-        ),
-    );
+    this.$on('formula:input', this.onFormulaUpdate.bind(this));
+    this.$on('formula:complete', this.onFormulaComplete.bind(this));
   }
 
   toHTML() {
@@ -53,12 +49,12 @@ export class Table extends ExcelComponent {
             .map(id => this.$root.findNode(`[data-id="${id}"]`));
         this.cellSelection.selectGroup($groups);
       } else {
-        this.cellSelection.select($target);
+        this.selectCellUpdate($target);
       }
     }
   }
 
-  onKeyup(event) {
+  onKeydown(event) {
     const availableKeys = [
       'Enter',
       'Tab',
@@ -74,12 +70,21 @@ export class Table extends ExcelComponent {
       const $closestCell = this.$root.findNode(`[data-id="${id}"]`);
       if ($closestCell && $closestCell.$nativeElement) {
         // fixme: $nativeElement - check for table max cell values range
-        this.cellSelection.select($closestCell);
+        this.selectCellUpdate($closestCell);
       }
     }
   }
 
   onFormulaUpdate(text) {
-    this.cellSelection.current.html(text);
+    this.cellSelection.current.text(text);
+  }
+
+  onFormulaComplete() {
+    this.cellSelection.current.focus();
+  }
+
+  selectCellUpdate($cell) {
+    this.cellSelection.select($cell);
+    this.$emit('table:cell_update', $cell.text());
   }
 }

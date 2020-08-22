@@ -7,11 +7,23 @@ export class ExcelComponent extends DomListener {
    */
   constructor($root, options = {}) {
     super($root, options.listeners);
+    /** @type {string} */
     this.name = options.name;
+    /** @type {EventEmitter} */
     this.emitter = options.emitter;
+    /** @type {Array<Function>} */
     this.subscriptions = [];
 
     this.beforeInit();
+  }
+
+  $emit(eventType, data) {
+    this.emitter.emit(eventType, data);
+  }
+
+  $on(eventType, handler) {
+    const sub = this.emitter.subscribe(eventType, handler);
+    this.subscriptions.push(sub);
   }
 
   beforeInit() {}
