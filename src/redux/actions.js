@@ -6,3 +6,10 @@ export function actionTableResize(data) {
     data,
   };
 }
+
+export function actionTableTextUpdate(data) {
+  return {
+    type: Action.TABLE_TEXT_UPDATE,
+    data,
+  };
+}

@@ -1,3 +1,4 @@
 export const Action = {
   TABLE_RESIZE: 'TABLE_RESIZE',
+  TABLE_TEXT_UPDATE: 'TABLE_TEXT_UPDATE',
 };

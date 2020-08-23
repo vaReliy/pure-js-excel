@@ -9,7 +9,15 @@ import {Store} from '@core/Store';
 import './scss/index.scss';
 
 const stateKey = 'excel-state';
-const store = new Store(rootReducer, storage(stateKey) || {});
+const defaultState = {
+  table: {
+    col: {},
+    row: {},
+    cellData: {},
+    currentTextContent: {},
+  },
+};
+const store = new Store(rootReducer, storage(stateKey) || defaultState);
 
 store.subscribe(state => {
   console.log('APP', state); // fixme

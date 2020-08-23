@@ -2,7 +2,7 @@ import {CellSelection} from '@/components/table/CellSelection';
 // eslint-disable-next-line max-len
 import {cellIdMatrix, closestCellId, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
-import {actionTableResize} from '@/redux/actions';
+import {actionTableResize, actionTableTextUpdate} from '@/redux/actions';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -89,7 +89,7 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event) {
-    this.$emit(EventType.TABLE.UPDATE, $(event.target).text());
+    this.textUpdateStore($(event.target).text());
   }
 
   onFormulaUpdate(text) {
@@ -102,6 +102,17 @@ export class Table extends ExcelComponent {
 
   selectCellUpdate($cell) {
     this.cellSelection.select($cell);
-    this.$emit(EventType.TABLE.UPDATE, $cell.text());
+    this.textUpdateStore($cell.text());
+  }
+
+  textUpdateStore(textData) {
+    const data = {
+      cellData: {
+        id: this.cellSelection.current.getId(),
+        value: textData,
+      },
+      currentTextContent: textData,
+    };
+    this.$dispatch(actionTableTextUpdate(data));
   }
 }

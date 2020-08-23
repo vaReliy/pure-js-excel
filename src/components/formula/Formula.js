@@ -16,13 +16,15 @@ export class Formula extends ExcelComponent {
   init() {
     super.init();
 
-    this.$on(EventType.TABLE.UPDATE, this.onCellUpdate.bind(this));
-    // this.$subscribe(state => console.log('FORMULA:', state)); // fixme
+    this.$subscribe(state => {
+      console.log('FORMULA:', state.table.currentTextContent); // fixme
+      this.onCellContentUpdate(state.table.currentTextContent);
+    });
   }
 
   onInput(event) {
     const text = $(event.target).text();
-    this.onCellUpdate(text);
+    this.onCellContentUpdate(text);
     this.$emit(EventType.FORMULA.INPUT, text);
   }
 
@@ -38,7 +40,7 @@ export class Formula extends ExcelComponent {
     console.log('Formula onClick()', event); // fixme
   }
 
-  onCellUpdate(text) {
+  onCellContentUpdate(text) {
     const $input = this.$root.findNode('[data-type="input"]');
     $input.text(text);
   }
