@@ -73,12 +73,12 @@ function toColumn({index, char, width}) {
     `;
 }
 
-function toCell(rowId, state = {}, cellData) {
+function toCell(rowId, tableState) {
   return ({index, char}) => {
     const columnId = index + 1;
-    const width = getWidth(state, index);
+    const width = getWidth(tableState.size.col, index);
     const id = `${columnId}:${rowId}`;
-    const content = cellData[id] || '';
+    const content = tableState.cellData[id] || '';
     return `<div
               class="cell"
               contenteditable="true"
@@ -100,13 +100,11 @@ export function getTemplateTable(size, tableState) {
   const rows = [];
   const rowSize = CODES.range();
   const sizeState = tableState.size;
-  const {cellData} = tableState;
-  const columnState = sizeState.col;
 
   const columnHeaders = new Array(rowSize)
       .fill('')
       .map(toChar)
-      .map(withWidthFrom(columnState))
+      .map(withWidthFrom(sizeState.col))
       .map(toColumn)
       .join('');
 
@@ -116,7 +114,7 @@ export function getTemplateTable(size, tableState) {
     const columnCells = new Array(rowSize)
         .fill('')
         .map(toChar)
-        .map(toCell(rowId, columnState, cellData))
+        .map(toCell(rowId, tableState))
         .join('');
 
     rows.push(createRow(rowId, columnCells, sizeState.row));
