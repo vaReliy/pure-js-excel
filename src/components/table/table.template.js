@@ -4,11 +4,32 @@ const CODES = {
   range: () => CODES.Z - CODES.A + 1,
 };
 
-function createRow(rowId, rowData) {
+const DEFAULT = {
+  WIDTH: 120,
+  HEIGHT: 24,
+};
+
+function getWidth(state, index) {
+  return (state[index + 1] || DEFAULT.WIDTH) + 'px';
+}
+
+function withWidthFrom(state ={}) {
+  return function({char, index}) {
+    const width = getWidth(state, index);
+    return {char, index, width};
+  };
+}
+
+function createRow(rowId, rowData, state = {}) {
   // eslint-disable-next-line max-len
   const resize = rowId ? '<div class="row-resize" data-resize="row"></div>' : '';
+  const height = (state[rowId] || DEFAULT.HEIGHT) + 'px';
   return `
-        <div class="row" data-id="${rowId}" data-resizable="row">
+        <div
+            class="row"
+            data-id="${rowId}"
+            data-resizable="row"
+            style="height: ${height}">
             <div class="row-info">
                 ${rowId}
                 ${resize}
@@ -39,36 +60,48 @@ function toChar(_, index) {
   return result;
 }
 
-function toColumn({index, char}) {
+function toColumn({index, char, width}) {
   return `
-    <div class="column" data-id="${index + 1}" data-resizable="column">
+    <div
+        class="column"
+        data-id="${index + 1}"
+        data-resizable="column"
+        style="width: ${width}">
         ${char}
         <div class="col-resize" data-resize="column"></div>
     </div>
     `;
 }
 
-function toCell(rowId) {
+function toCell(rowId, state = {}) {
   return ({index, char}) => {
     const columnId = index + 1;
+    const width = getWidth(state, index);
     return `<div
               class="cell"
               contenteditable="true"
               data-resizable-${columnId}="cell"
               data-id="${columnId}:${rowId}"
-              data-type="cell">
+              data-type="cell"
+              style="width: ${width}">
           </div>`;
   };
 }
 
-
-export function getTemplateTable(size = 30) {
+/**
+ * @param {number} size
+ * @param {{row: string, col: string}} state
+ * @return {string}
+ */
+export function getTemplateTable(size, state = {}) {
   const rows = [];
   const rowSize = CODES.range();
+  const columnState = state.col;
 
   const columnHeaders = new Array(rowSize)
       .fill('')
       .map(toChar)
+      .map(withWidthFrom(columnState))
       .map(toColumn)
       .join('');
 
@@ -78,10 +111,10 @@ export function getTemplateTable(size = 30) {
     const columnCells = new Array(rowSize)
         .fill('')
         .map(toChar)
-        .map(toCell(rowId))
+        .map(toCell(rowId, columnState))
         .join('');
 
-    rows.push(createRow(rowId, columnCells));
+    rows.push(createRow(rowId, columnCells, state.row));
   }
 
   return rows.join('');
