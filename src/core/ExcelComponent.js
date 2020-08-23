@@ -13,6 +13,8 @@ export class ExcelComponent extends DomListener {
     this.emitter = options.emitter;
     /** @type Store */
     this.store = options.store;
+    /** @type {Array<string>} */
+    this.subscribe = options.subscribe || [];
     /** @type {Array<Function>} */
     this.subscriptions = [];
 
@@ -32,9 +34,8 @@ export class ExcelComponent extends DomListener {
     this.store.dispatch(action);
   }
 
-  $subscribe(handler) {
-    this.store.subscribe(handler);
-  }
+  /** @param {Object} changes */
+  $onStoreChanges(changes) {}
 
   beforeInit() {}
 
@@ -44,6 +45,10 @@ export class ExcelComponent extends DomListener {
 
   toHTML() {
     return '';
+  }
+
+  isWatching(key) {
+    return this.subscribe.includes(key);
   }
 
   destroy() {

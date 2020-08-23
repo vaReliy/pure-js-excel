@@ -9,17 +9,13 @@ export class Formula extends ExcelComponent {
     super($root, {
       name: 'Formula',
       listeners: ['input', 'click', 'keydown'],
+      subscribe: ['currentTextContent'],
       ...options,
     });
   }
 
-  init() {
-    super.init();
-
-    this.$subscribe(state => {
-      console.log('FORMULA:', state.table.currentTextContent); // fixme
-      this.onCellContentUpdate(state.table.currentTextContent);
-    });
+  $onStoreChanges(changes) {
+    this.onCellContentUpdate(changes['currentTextContent']);
   }
 
   onInput(event) {
