@@ -17,6 +17,7 @@ export class CellSelection {
     this.reset();
     this.group.push($el);
     this._current = $el;
+    this._current.focus();
     this.applySelect();
   }
 

@@ -73,30 +73,35 @@ function toColumn({index, char, width}) {
     `;
 }
 
-function toCell(rowId, state = {}) {
+function toCell(rowId, state = {}, cellData) {
   return ({index, char}) => {
     const columnId = index + 1;
     const width = getWidth(state, index);
+    const id = `${columnId}:${rowId}`;
+    const content = cellData[id] || '';
     return `<div
               class="cell"
               contenteditable="true"
               data-resizable-${columnId}="cell"
-              data-id="${columnId}:${rowId}"
+              data-id="${id}"
               data-type="cell"
               style="width: ${width}">
+              ${content}
           </div>`;
   };
 }
 
 /**
  * @param {number} size
- * @param {{row: string, col: string}} state
+ * @param {TableState} tableState
  * @return {string}
  */
-export function getTemplateTable(size, state = {}) {
+export function getTemplateTable(size, tableState) {
   const rows = [];
   const rowSize = CODES.range();
-  const columnState = state.col;
+  const sizeState = tableState.size;
+  const {cellData} = tableState;
+  const columnState = sizeState.col;
 
   const columnHeaders = new Array(rowSize)
       .fill('')
@@ -111,10 +116,10 @@ export function getTemplateTable(size, state = {}) {
     const columnCells = new Array(rowSize)
         .fill('')
         .map(toChar)
-        .map(toCell(rowId, columnState))
+        .map(toCell(rowId, columnState, cellData))
         .join('');
 
-    rows.push(createRow(rowId, columnCells, state.row));
+    rows.push(createRow(rowId, columnCells, sizeState.row));
   }
 
   return rows.join('');

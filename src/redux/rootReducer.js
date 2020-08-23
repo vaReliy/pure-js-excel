@@ -4,14 +4,14 @@ export function rootReducer(state, action) {
   switch (action.type) {
     case Action.TABLE_RESIZE: {
       const {id, type, value} = action.data;
-      const table = state.table || {};
-      table[type] = table[type] || {};
-      table[type][id] = value;
+      const {table} = state;
+      table.size[type] = table.size[type] || {};
+      table.size[type][id] = value;
       return {...state, table};
     }
     case Action.TABLE_TEXT_UPDATE: {
       const {cellData, currentTextContent} = action.data;
-      const table = state.table || {};
+      const {table} = state;
       table.cellData = table.cellData || {};
       table.cellData[cellData.id] = cellData.value;
       table.currentTextContent = currentTextContent || '';

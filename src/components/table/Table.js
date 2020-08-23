@@ -94,10 +94,11 @@ export class Table extends ExcelComponent {
 
   onFormulaUpdate(text) {
     this.cellSelection.current.text(text);
+    this.textUpdateStore(text);
   }
 
   onFormulaDone() {
-    this.cellSelection.current.focus();
+    this.selectCellUpdate(this.cellSelection.current);
   }
 
   selectCellUpdate($cell) {

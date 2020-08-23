@@ -1,7 +1,7 @@
 export class Store {
   /**
    * @param {Function} rootReducer
-   * @param {Object} initialState
+   * @param {State} initialState
    */
   constructor(rootReducer, initialState) {
     /** @type Function */
@@ -23,6 +23,7 @@ export class Store {
     this.listeners.forEach(listener => listener(this.state));
   }
 
+  /** @return {State} */
   getState() {
     return this.state;
   }

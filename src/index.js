@@ -4,20 +4,14 @@ import {Header} from '@/components/header/Header';
 import {Table} from '@/components/table/Table';
 import {Toolbar} from '@/components/toolbar/Toolbar';
 import {rootReducer} from '@/redux/rootReducer';
+import {State} from '@/redux/state';
 import {storage} from '@/utils/utils';
 import {Store} from '@core/Store';
 import './scss/index.scss';
 
 const stateKey = 'excel-state';
-const defaultState = {
-  table: {
-    col: {},
-    row: {},
-    cellData: {},
-    currentTextContent: {},
-  },
-};
-const store = new Store(rootReducer, storage(stateKey) || defaultState);
+const appState = storage(stateKey) || new State();
+const store = new Store(rootReducer, appState);
 
 store.subscribe(state => {
   console.log('APP', state); // fixme
