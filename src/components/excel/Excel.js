@@ -1,4 +1,3 @@
-import {Action} from '@/redux/action-type';
 import {$} from '@core/Dom';
 import {EventEmitter} from '@core/EventEmitter';
 
@@ -31,7 +30,6 @@ export class Excel {
     this.$el.append(this.getRoot());
 
     this.components.forEach(component => component.init());
-    this.store.dispatch({type: Action.__INIT__});
     // this.destroyAfterDelay(10000); // fixme
   }
 

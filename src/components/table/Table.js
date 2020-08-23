@@ -1,13 +1,6 @@
 import {CellSelection} from '@/components/table/CellSelection';
-import {
-  cellIdMatrix,
-  closestCellId,
-  isCell,
-  resizeHandler,
-  shouldResize,
-  updateColumnsSize,
-  updateRowsSize,
-} from '@/components/table/table.functions';
+// eslint-disable-next-line max-len
+import {cellIdMatrix, closestCellId, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
 import {actionTableResize} from '@/redux/actions';
 import {$} from '@core/Dom';
@@ -39,13 +32,7 @@ export class Table extends ExcelComponent {
     this.$on(EventType.FORMULA.INPUT, this.onFormulaUpdate.bind(this));
     this.$on(EventType.FORMULA.DONE, this.onFormulaDone.bind(this));
 
-    this.$subscribe(state => {
-      if (state.table) {
-        const {col, row} = state.table;
-        updateColumnsSize(this.$root, col);
-        updateRowsSize(this.$root, row);
-      }
-    });
+    // this.$subscribe(state => console.log('TABLE:', state)); // fixme
   }
 
   toHTML() {

@@ -93,32 +93,3 @@ export function resizeHandler(event) {
     };
   });
 }
-
-export function updateColumnsSize($root, columns) {
-  Object.keys(columns).forEach(id => {
-    const $target = $root.findNode(`[data-id="${id}"]`);
-    const value = `${columns[id]}px`;
-    $target.css({
-      width: value,
-    });
-    $root.findNodeList(`[data-resizable-${id}]`).forEach(cell => {
-      cell.style.width = value;
-    });
-  });
-}
-
-export function updateRowsSize($root, rows) {
-  const ids = Object.keys(rows);
-  const nodeList = $root.findNodeList('[data-resizable="row"]');
-  Array
-      .from(nodeList)
-      .forEach(row => {
-        const id = row.getAttribute('data-id');
-        if (ids.includes(id)) {
-          const value = `${rows[id]}px`;
-          $(row).css({
-            height: value,
-          });
-        }
-      });
-}
