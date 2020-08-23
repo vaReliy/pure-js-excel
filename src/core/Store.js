@@ -1,3 +1,5 @@
+import {Action} from '@/redux/action-type';
+
 export class Store {
   /**
    * @param {Function} rootReducer
@@ -6,7 +8,7 @@ export class Store {
   constructor(rootReducer, initialState) {
     /** @type Function */
     this.reducer = rootReducer.bind(this);
-    this.state = this.reducer(initialState, {type: '__INIT__'});
+    this.state = this.reducer(initialState, {type: Action.__INIT__});
     /** @type Array<Function> */
     this.listeners = [];
   }
