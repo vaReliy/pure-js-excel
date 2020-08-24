@@ -67,6 +67,13 @@ class Dom {
     return this;
   }
 
+  getStyles(styleKeys = []) {
+    return styleKeys.reduce((result, key) => {
+      result[key] = this.$nativeElement.style[key];
+      return result;
+    }, {});
+  }
+
   focus() {
     this.$nativeElement.focus();
     return this;

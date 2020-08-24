@@ -3,6 +3,7 @@ import {CellSelection} from '@/components/table/CellSelection';
 import {cellIdMatrix, closestCellId, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
 import {actionTableResize, actionTableTextUpdate} from '@/redux/actions';
+import {defaultStyles} from '@core/constants';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -31,8 +32,7 @@ export class Table extends ExcelComponent {
 
     this.$on(EventType.FORMULA.INPUT, this.onFormulaUpdate.bind(this));
     this.$on(EventType.FORMULA.DONE, this.onFormulaDone.bind(this));
-
-    // this.$subscribe(state => console.log('TABLE:', state)); // fixme
+    this.$on(EventType.TOOLBAR.UPDATE, this.onToolbarUpdate.bind(this));
   }
 
   toHTML() {
@@ -101,9 +101,15 @@ export class Table extends ExcelComponent {
     this.selectCellUpdate(this.cellSelection.current);
   }
 
+  onToolbarUpdate(style) {
+    this.cellSelection.applyStyle(style);
+  }
+
   selectCellUpdate($cell) {
     this.cellSelection.select($cell);
     this.textUpdateStore($cell.text());
+    const cellStyles = $cell.getStyles(Object.keys(defaultStyles));
+    console.log(cellStyles); // fixme
   }
 
   textUpdateStore(textData) {

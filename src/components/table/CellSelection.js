@@ -34,6 +34,10 @@ export class CellSelection {
     this.group.forEach($el => $el.focus().addClass(CellSelection.className));
   }
 
+  applyStyle(style) {
+    this.group.forEach($el => $el.css(style));
+  }
+
   reset() {
     this.group.forEach($el => $el.removeClass(CellSelection.className));
     this.group = [];

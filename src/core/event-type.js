@@ -6,4 +6,7 @@ export const EventType = {
   TABLE: {
     UPDATE: 'table:update',
   },
+  TOOLBAR: {
+    UPDATE: 'toolbar:update',
+  },
 };
