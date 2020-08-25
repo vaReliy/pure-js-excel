@@ -1,3 +1,4 @@
+import {Action} from '@/redux/action-type';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -9,9 +10,16 @@ export class Formula extends ExcelComponent {
     super($root, {
       name: 'Formula',
       listeners: ['input', 'click', 'keydown'],
-      subscribe: ['currentTextContent'],
+      subscribe: [Action.__INIT__, 'currentTextContent'],
       ...options,
     });
+  }
+
+  $onInit(state) {
+    const {table} = state;
+    if (table) {
+      this.onCellContentUpdate(table.currentTextContent);
+    }
   }
 
   $onStoreChanges(changes) {
