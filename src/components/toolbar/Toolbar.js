@@ -24,6 +24,11 @@ export class Toolbar extends ExcelStateComponent {
     this.initState(defaultStyles);
   }
 
+  init() {
+    super.init();
+    this.$on(EventType.TABLE.STYLE_UPDATE, this.onStyleUpdate.bind(this));
+  }
+
   toHTML() {
     return this.template;
   }
@@ -37,5 +42,9 @@ export class Toolbar extends ExcelStateComponent {
       this.$emit(EventType.TOOLBAR.UPDATE, style);
       this.setState({[key]: style[key]});
     }
+  }
+
+  onStyleUpdate(styles) {
+    Object.keys(styles).forEach(key => this.setState({[key]: styles[key]}));
   }
 }

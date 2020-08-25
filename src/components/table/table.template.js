@@ -1,3 +1,6 @@
+import {camelToDashCase} from '@/utils/utils';
+import {defaultStyles} from '@core/constants';
+
 const CODES = {
   A: 65,
   Z: 90,
@@ -73,22 +76,41 @@ function toColumn({index, char, width}) {
     `;
 }
 
-function toCell(rowId, tableState) {
+function toCell(rowId, tableState, styleData) {
   return ({index, char}) => {
     const columnId = index + 1;
     const width = getWidth(tableState.size.col, index);
     const id = `${columnId}:${rowId}`;
     const content = tableState.cellData[id] || '';
+    const styles = styleData[id] || defaultStyles;
     return `<div
               class="cell"
               contenteditable="true"
               data-resizable-${columnId}="cell"
               data-id="${id}"
               data-type="cell"
-              style="width: ${width}">
+              style="width: ${width}; ${toTemplateString(styles)}">
               ${content}
           </div>`;
   };
+}
+
+/* Merge default and current styleData without empty values */
+function getCorrectCellStyleData(styleData) {
+  return Object.keys(styleData).reduce((data, id) => {
+    const styles = styleData[id];
+    data[id] = Object.keys(styles).reduce((res, key) => {
+      res[key] = styles[key] ? styles[key] : defaultStyles[key];
+      return res;
+    }, {});
+    return data;
+  }, {});
+}
+
+function toTemplateString(styles) {
+  return Object.keys(styles).reduce((str, key) => {
+    return str + `${camelToDashCase(key)}: ${styles[key]}; `;
+  }, '');
 }
 
 /**
@@ -100,6 +122,7 @@ export function getTemplateTable(size, tableState) {
   const rows = [];
   const rowSize = CODES.range();
   const sizeState = tableState.size;
+  const styleData = getCorrectCellStyleData(tableState.styleData);
 
   const columnHeaders = new Array(rowSize)
       .fill('')
@@ -114,7 +137,7 @@ export function getTemplateTable(size, tableState) {
     const columnCells = new Array(rowSize)
         .fill('')
         .map(toChar)
-        .map(toCell(rowId, tableState))
+        .map(toCell(rowId, tableState, styleData))
         .join('');
 
     rows.push(createRow(rowId, columnCells, sizeState.row));

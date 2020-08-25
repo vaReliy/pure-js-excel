@@ -18,6 +18,13 @@ export function rootReducer(state, action) {
       table.currentTextContent = currentTextContent || '';
       return {...state, table};
     }
+    case Action.TABLE_STYLE_UPDATE: {
+      const {id, value} = action.data;
+      const {table} = state;
+      table.styleData = table.styleData || {};
+      table.styleData[id] = value;
+      return {...state, table};
+    }
     default: return state;
   }
 }

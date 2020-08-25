@@ -13,3 +13,11 @@ export function actionTableTextUpdate(data) {
     data,
   };
 }
+
+/* data: {id: number, value: string} */
+export function actionTableStyleUpdate(data) {
+  return {
+    type: Action.TABLE_STYLE_UPDATE,
+    data,
+  };
+}

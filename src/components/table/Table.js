@@ -1,9 +1,19 @@
 import {CellSelection} from '@/components/table/CellSelection';
 // eslint-disable-next-line max-len
-import {cellIdMatrix, closestCellId, isCell, resizeHandler, shouldResize} from '@/components/table/table.functions';
+import {
+  cellIdMatrix,
+  closestCellId,
+  getStylesByDefaultKeys,
+  isCell,
+  resizeHandler,
+  shouldResize,
+} from '@/components/table/table.functions';
 import {getTemplateTable} from '@/components/table/table.template';
-import {actionTableResize, actionTableTextUpdate} from '@/redux/actions';
-import {defaultStyles} from '@core/constants';
+import {
+  actionTableResize,
+  actionTableStyleUpdate,
+  actionTableTextUpdate,
+} from '@/redux/actions';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -103,13 +113,13 @@ export class Table extends ExcelComponent {
 
   onToolbarUpdate(style) {
     this.cellSelection.applyStyle(style);
+    this.styleUpdateStore(this.cellSelection.current);
   }
 
   selectCellUpdate($cell) {
     this.cellSelection.select($cell);
     this.textUpdateStore($cell.text());
-    const cellStyles = $cell.getStyles(Object.keys(defaultStyles));
-    console.log(cellStyles); // fixme
+    this.$emit(EventType.TABLE.STYLE_UPDATE, getStylesByDefaultKeys($cell));
   }
 
   textUpdateStore(textData) {
@@ -121,5 +131,14 @@ export class Table extends ExcelComponent {
       currentTextContent: textData,
     };
     this.$dispatch(actionTableTextUpdate(data));
+  }
+
+  styleUpdateStore($cell) {
+    const cellStyles = getStylesByDefaultKeys($cell);
+    const styleData = {
+      id: $cell.getId(),
+      value: cellStyles,
+    };
+    this.$dispatch(actionTableStyleUpdate(styleData));
   }
 }

@@ -4,7 +4,7 @@ export const EventType = {
     INPUT: 'formula:input',
   },
   TABLE: {
-    UPDATE: 'table:update',
+    STYLE_UPDATE: 'table:style-update',
   },
   TOOLBAR: {
     UPDATE: 'toolbar:update',

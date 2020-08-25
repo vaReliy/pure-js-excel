@@ -1,4 +1,5 @@
 import {range} from '@/utils/utils';
+import {defaultStyles} from '@core/constants';
 import {$} from '@core/Dom';
 
 export function shouldResize(event) {
@@ -92,4 +93,8 @@ export function resizeHandler(event) {
       document.onmouseup = null;
     };
   });
+}
+
+export function getStylesByDefaultKeys($cell) {
+  return $cell.getStyles(Object.keys(defaultStyles));
 }

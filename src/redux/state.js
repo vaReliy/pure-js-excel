@@ -10,6 +10,7 @@ export function TableState() {
       col: {},
       row: {},
     },
+    styleData: {},
     cellData: {},
     currentTextContent: {},
   };
