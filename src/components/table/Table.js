@@ -113,7 +113,9 @@ export class Table extends ExcelComponent {
 
   onToolbarUpdate(style) {
     this.cellSelection.applyStyle(style);
-    this.styleUpdateStore(this.cellSelection.current);
+    this.cellSelection.group.forEach($cell => {
+      this.styleUpdateStore($cell);
+    });
   }
 
   selectCellUpdate($cell) {
