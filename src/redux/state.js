@@ -1,6 +1,9 @@
 export function State() {
   return {
     table: new TableState(),
+    header: {
+      title: '',
+    },
   };
 }
 

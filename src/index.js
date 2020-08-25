@@ -13,7 +13,12 @@ const stateKey = 'excel-state';
 const appState = storage(stateKey) || new State();
 const store = new Store(rootReducer, appState);
 
+let isFirstHook = true;
 store.subscribe(state => {
+  if (isFirstHook) {
+    excel.$sendInitHook(state);
+    isFirstHook = false;
+  }
   console.log('APP', state); // fixme
   storage(stateKey, state);
 });

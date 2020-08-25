@@ -12,7 +12,7 @@ export class StoreSubscriber {
 
     this.unsubscriber = this.store.subscribe(state => {
       // eslint-disable-next-line max-len
-      const rootStateKeys = ['table']; // todo: add other states: toolbar, header, formula
+      const rootStateKeys = ['table', 'header']; // todo: add other states: toolbar, formula
       rootStateKeys.forEach(rootKey => {
         detectChanges(state[rootKey], this.prevState[rootKey], components);
       });

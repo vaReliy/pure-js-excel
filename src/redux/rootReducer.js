@@ -25,6 +25,10 @@ export function rootReducer(state, action) {
       table.styleData[id] = value;
       return {...state, table};
     }
+    case Action.HEADER_UPDATE: {
+      const header = {...action.data};
+      return {...state, header};
+    }
     default: return state;
   }
 }

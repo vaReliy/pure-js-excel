@@ -60,6 +60,10 @@ class Dom {
     return this.$nativeElement.dataset;
   }
 
+  get value() {
+    return this.$nativeElement.value;
+  }
+
   css(styles = {}) {
     Object.entries(styles).forEach(([key, value]) => {
       this.$nativeElement.style[key] = value;

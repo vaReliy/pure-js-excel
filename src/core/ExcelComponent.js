@@ -34,6 +34,8 @@ export class ExcelComponent extends DomListener {
     this.store.dispatch(action);
   }
 
+  $onInit(state) {}
+
   /** @param {Object} changes */
   $onStoreChanges(changes) {}
 

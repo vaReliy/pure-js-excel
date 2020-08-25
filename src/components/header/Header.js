@@ -1,20 +1,38 @@
-import {ExcelComponent} from '@core/ExcelComponent';
+import {createHeader} from '@/components/header/header.template';
+import {Action} from '@/redux/action-type';
+import {actionHeaderUpdate} from '@/redux/actions';
+import {$} from '@core/Dom';
+import {ExcelStateComponent} from '@core/ExcelStateComponent';
 
-export class Header extends ExcelComponent {
+export class Header extends ExcelStateComponent {
   static className = 'excel__header';
 
+  constructor($root, options) {
+    super($root, {
+      name: 'Header',
+      listeners: ['input'],
+      subscribe: [Action.__INIT__],
+      ...options,
+    });
+  }
+
+  get template() {
+    return createHeader(this.state.title);
+  }
+
   toHTML() {
-    return `<input class="input" type="text" placeholder="New table">
+    return this.template;
+  }
 
-            <div class="buttons">
-                <div class="button">
-                    <i class="material-icons">delete</i>
-                </div>
+  onInput(event) {
+    const state = {title: $(event.target).value};
+    this.$dispatch(actionHeaderUpdate(state));
+  }
 
-                <div class="button">
-                    <i class="material-icons">exit_to_app</i>
-                </div>
-            </div>
-    `;
+  $onInit(state) {
+    const {header} = state;
+    if (header) {
+      this.setState(header);
+    }
   }
 }

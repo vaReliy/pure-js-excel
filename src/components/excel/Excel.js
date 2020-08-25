@@ -1,3 +1,4 @@
+import {Action} from '@/redux/action-type';
 import {$} from '@core/Dom';
 import {EventEmitter} from '@core/EventEmitter';
 import {StoreSubscriber} from '@core/StoreSubscriber';
@@ -8,6 +9,14 @@ export class Excel {
     this.components = options.components || [];
     this.store = options.store;
     this.subscriber = new StoreSubscriber(this.store);
+  }
+
+  $sendInitHook(state) {
+    this.components.forEach(component => {
+      if (component.isWatching(Action.__INIT__)) {
+        component.$onInit(state);
+      }
+    });
   }
 
   getRoot() {

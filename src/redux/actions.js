@@ -21,3 +21,10 @@ export function actionTableStyleUpdate(data) {
     data,
   };
 }
+
+export function actionHeaderUpdate(data) {
+  return {
+    type: Action.HEADER_UPDATE,
+    data,
+  };
+}
