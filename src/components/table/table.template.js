@@ -1,5 +1,6 @@
 import {camelToDashCase} from '@/utils/utils';
 import {defaultStyles} from '@core/constants';
+import {parse} from '@core/parse';
 
 const CODES = {
   A: 65,
@@ -89,8 +90,9 @@ function toCell(rowId, state, styleData) {
               data-resizable-${columnId}="cell"
               data-id="${id}"
               data-type="cell"
+              data-formula="${content}"
               style="width: ${width}; ${toTemplateString(styles)}">
-              ${content}
+              ${parse(content)}
           </div>`;
   };
 }

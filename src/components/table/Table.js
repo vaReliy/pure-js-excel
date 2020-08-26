@@ -18,6 +18,7 @@ import {debounce} from '@/utils/utils';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
+import {parse} from '@core/parse';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -41,7 +42,7 @@ export class Table extends ExcelComponent {
 
     const $defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
     this.selectCellUpdate($defaultSelectedCell);
-    this.$emit(EventType.TABLE.INIT, $defaultSelectedCell.text());
+    this.$emit(EventType.TABLE.INIT, $defaultSelectedCell.attr('data-formula'));
 
     this.$on(EventType.FORMULA.INPUT, this.onFormulaUpdate.bind(this));
     this.$on(EventType.FORMULA.DONE, this.onFormulaDone.bind(this));
@@ -111,7 +112,7 @@ export class Table extends ExcelComponent {
   }
 
   onFormulaDone() {
-    this.selectCellUpdate(this.cellSelection.current);
+    this.selectCellUpdate(this.cellSelection.current, true);
   }
 
   onToolbarUpdate(style) {
@@ -121,20 +122,32 @@ export class Table extends ExcelComponent {
     });
   }
 
-  selectCellUpdate($cell) {
+  selectCellUpdate($cell, isFormulaDone = false) {
+    const $activeCell = this.cellSelection.current;
+    if ($activeCell) {
+      if ($activeCell.getId() === $cell.getId() && !isFormulaDone) {
+        return;
+      }
+      const src = $activeCell.text();
+      $activeCell.attr('data-formula', src);
+      $activeCell.text(`${parse(src)}`);
+    }
     this.cellSelection.select($cell);
-    this.textUpdateStore($cell.text());
+    const cellData = $cell.attr('data-formula') || $cell.text();
+    this.textUpdateStore(cellData);
     this.$emit(EventType.TABLE.STYLE_UPDATE, getStylesByDefaultKeys($cell));
   }
 
-  textUpdateStore(textData) {
+  textUpdateStore(srcTextData) {
+    const $cell = this.cellSelection.current;
     const data = {
       cellData: {
-        id: this.cellSelection.current.getId(),
-        value: textData,
+        id: $cell.getId(),
+        value: srcTextData,
       },
-      currentTextContent: textData,
+      currentTextContent: srcTextData,
     };
+    $cell.text(srcTextData);
     this.$dispatch(actionTableTextUpdate(data));
   }
 

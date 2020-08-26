@@ -21,6 +21,14 @@ class Dom {
     return this.$nativeElement.textContent.trim();
   }
 
+  attr(name, value) {
+    if (typeof value === 'string') {
+      this.$nativeElement.setAttribute(name, value);
+      return this;
+    }
+    return this.$nativeElement.getAttribute(name);
+  }
+
   clear() {
     this.html('');
     return this;
