@@ -41,6 +41,7 @@ export class Table extends ExcelComponent {
 
     const $defaultSelectedCell = this.$root.findNode('[data-id="1:1"]');
     this.selectCellUpdate($defaultSelectedCell);
+    this.$emit(EventType.TABLE.INIT, $defaultSelectedCell.text());
 
     this.$on(EventType.FORMULA.INPUT, this.onFormulaUpdate.bind(this));
     this.$on(EventType.FORMULA.DONE, this.onFormulaDone.bind(this));

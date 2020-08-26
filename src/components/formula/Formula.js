@@ -20,13 +20,10 @@ export class Formula extends ExcelComponent {
     this.onInput = debounce(this.onInput.bind(this), 300);
   }
 
-  // init() {
-  //   super.init();
-  //   const state = this.store.getState();
-  //   if (state) {
-  //     this.onCellContentUpdate(state.currentTextContent); // todo
-  //   }
-  // }
+  init() {
+    super.init();
+    this.$on(EventType.TABLE.INIT, this.onCellContentUpdate.bind(this));
+  }
 
   $onStoreChanges(changes) {
     this.onCellContentUpdate(changes['currentTextContent']);
