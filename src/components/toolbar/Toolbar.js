@@ -1,32 +1,50 @@
-import {ExcelComponent} from '@core/ExcelComponent';
+import {createToolbar} from '@/components/toolbar/toolbar.template';
+import {defaultStyles} from '@core/constants';
+import {$} from '@core/Dom';
+import {EventType} from '@core/event-type';
+import {ExcelStateComponent} from '@core/ExcelStateComponent';
 
-export class Toolbar extends ExcelComponent {
+export class Toolbar extends ExcelStateComponent {
   static className = 'excel__toolbar';
 
+  constructor($root, options) {
+    super($root, {
+      name: 'Toolbar',
+      listeners: ['click'],
+      ...options,
+    });
+  }
+
+  get template() {
+    return createToolbar(this.state);
+  }
+
+  beforeInit() {
+    super.beforeInit();
+    this.initState(defaultStyles);
+  }
+
+  init() {
+    super.init();
+    this.$on(EventType.TABLE.STYLE_UPDATE, this.onStyleUpdate.bind(this));
+  }
+
   toHTML() {
-    return `<div class="button">
-                <i class="material-icons">format_bold</i>
-            </div>
+    return this.template;
+  }
 
-            <div class="button">
-                <i class="material-icons">format_italic</i>
-            </div>
+  onClick(event) {
+    const $target = $(event.target);
+    if ($target.data.type === 'button') {
+      const style = JSON.parse($target.data.value);
+      const key = Object.keys(style)[0];
 
-            <div class="button">
-                <i class="material-icons">format_underlined</i>
-            </div>
+      this.$emit(EventType.TOOLBAR.UPDATE, style);
+      this.setState({[key]: style[key]});
+    }
+  }
 
-            <div class="button">
-                <i class="material-icons">format_align_left</i>
-            </div>
-
-            <div class="button">
-                <i class="material-icons">format_align_center</i>
-            </div>
-
-            <div class="button">
-                <i class="material-icons">format_align_right</i>
-            </div>
-    `;
+  onStyleUpdate(styles) {
+    Object.keys(styles).forEach(key => this.setState({[key]: styles[key]}));
   }
 }

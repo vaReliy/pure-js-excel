@@ -1,4 +1,5 @@
 import {range} from '@/utils/utils';
+import {defaultStyles} from '@core/constants';
 import {$} from '@core/Dom';
 
 export function shouldResize(event) {
@@ -40,45 +41,60 @@ export function closestCellId(direction, {col, row}) {
 }
 
 export function resizeHandler(event) {
-  const $resizer = $(event.target);
-  const $parent = $resizer.closest('[data-resizable]');
-  const isColumn = $resizer.data.resize === 'column';
-  const rect = $parent.boundingClientRect;
-  const parentId = $parent.getId();
-  const targetCellAttribute = `[data-resizable-${parentId}]`;
-  const resizerCssProp = isColumn ? 'right' : 'bottom';
+  return new Promise(resolve => {
+    const $resizer = $(event.target);
+    const $parent = $resizer.closest('[data-resizable]');
+    const isColumn = $resizer.data.resize === 'column';
+    const rect = $parent.boundingClientRect;
+    const parentId = $parent.getId();
+    const targetCellAttribute = `[data-resizable-${parentId}]`;
+    const resizerCssProp = isColumn ? 'right' : 'bottom';
 
-  let delta;
-  let widthValue;
-  document.onmousemove = event => {
-    if (isColumn) {
-      delta = event.clientX - rect.right;
-      widthValue = `${rect.width + delta}px`;
-    } else {
-      delta = event.clientY - rect.bottom;
-    }
-    $resizer.css({
-      [resizerCssProp]: `${-delta}px`,
-    });
-  };
+    let delta;
+    let widthValue;
+    document.onmousemove = event => {
+      if (isColumn) {
+        delta = event.clientX - rect.right;
+        widthValue = `${rect.width + delta}px`;
+      } else {
+        delta = event.clientY - rect.bottom;
+      }
+      $resizer.css({
+        [resizerCssProp]: `${-delta}px`,
+      });
+    };
 
-  document.onmouseup = () => {
-    if (isColumn) {
-      $parent.css({
-        width: widthValue,
+    document.onmouseup = () => {
+      if (isColumn) {
+        $parent.css({
+          width: widthValue,
+        });
+        document.querySelectorAll(targetCellAttribute).forEach(cell => {
+          cell.style.width = widthValue;
+        });
+      } else {
+        $parent.css({
+          height: `${rect.height + delta}px`,
+        });
+      }
+
+      const updatedRect = $parent.boundingClientRect;
+      const data = {
+        value: isColumn ? updatedRect.width : updatedRect.height,
+        id: $parent.data.id,
+        type: isColumn ? 'col' : 'row',
+      };
+      resolve(data);
+
+      $resizer.css({
+        [resizerCssProp]: 0,
       });
-      document.querySelectorAll(targetCellAttribute).forEach(cell => {
-        cell.style.width = widthValue;
-      });
-    } else {
-      $parent.css({
-        height: `${rect.height + delta}px`,
-      });
-    }
-    $resizer.css({
-      [resizerCssProp]: 0,
-    });
-    document.onmousemove = null;
-    document.onmouseup = null;
-  };
+      document.onmousemove = null;
+      document.onmouseup = null;
+    };
+  });
+}
+
+export function getStylesByDefaultKeys($cell) {
+  return $cell.getStyles(Object.keys(defaultStyles));
 }

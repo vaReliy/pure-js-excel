@@ -17,6 +17,7 @@ export class CellSelection {
     this.reset();
     this.group.push($el);
     this._current = $el;
+    this._current.focus();
     this.applySelect();
   }
 
@@ -31,6 +32,10 @@ export class CellSelection {
 
   applySelect() {
     this.group.forEach($el => $el.focus().addClass(CellSelection.className));
+  }
+
+  applyStyle(style) {
+    this.group.forEach($el => $el.css(style));
   }
 
   reset() {

@@ -1,10 +1,13 @@
 import {$} from '@core/Dom';
 import {EventEmitter} from '@core/EventEmitter';
+import {StoreSubscriber} from '@core/StoreSubscriber';
 
 export class Excel {
   constructor(selector, options) {
     this.$el = $(selector);
     this.components = options.components || [];
+    this.store = options.store;
+    this.subscriber = new StoreSubscriber(this.store);
   }
 
   getRoot() {
@@ -12,6 +15,7 @@ export class Excel {
 
     const options = {
       emitter: new EventEmitter(),
+      store: this.store,
     };
 
     this.components = this.components.map(Component => {
@@ -28,12 +32,18 @@ export class Excel {
     this.$el.append(this.getRoot());
 
     this.components.forEach(component => component.init());
+    this.subscriber.subscribeComponents(this.components);
     // this.destroyAfterDelay(10000); // fixme
+  }
+
+  destroy() {
+    this.subscriber.unsubscribeComponents();
+    this.components.forEach(component => component.destroy());
   }
 
   destroyAfterDelay(ms) {
     setTimeout(() => {
-      this.components.forEach(component => component.destroy());
+      this.destroy();
     }, ms);
   }
 }

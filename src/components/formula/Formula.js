@@ -1,3 +1,4 @@
+import {debounce} from '@/utils/utils';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -8,20 +9,29 @@ export class Formula extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Formula',
-      listeners: ['input', 'click', 'keydown'],
+      listeners: ['input', 'keydown'],
+      subscribe: ['currentTextContent'],
       ...options,
     });
   }
 
+  beforeInit() {
+    super.beforeInit();
+    this.onInput = debounce(this.onInput.bind(this), 300);
+  }
+
   init() {
     super.init();
+    this.$on(EventType.TABLE.INIT, this.onCellContentUpdate.bind(this));
+  }
 
-    this.$on(EventType.TABLE.UPDATE, this.onCellUpdate.bind(this));
+  $onStoreChanges(changes) {
+    this.onCellContentUpdate(changes['currentTextContent']);
   }
 
   onInput(event) {
     const text = $(event.target).text();
-    this.onCellUpdate(text);
+    this.onCellContentUpdate(text);
     this.$emit(EventType.FORMULA.INPUT, text);
   }
 
@@ -33,11 +43,7 @@ export class Formula extends ExcelComponent {
     }
   }
 
-  onClick(event) {
-    console.log('Formula onClick()', event); // fixme
-  }
-
-  onCellUpdate(text) {
+  onCellContentUpdate(text) {
     const $input = this.$root.findNode('[data-type="input"]');
     $input.text(text);
   }

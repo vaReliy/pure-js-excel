@@ -1,20 +1,31 @@
+import {createHeader} from '@/components/header/header.template';
+import {actionHeaderUpdate} from '@/redux/actions';
+import {debounce} from '@/utils/utils';
+import {$} from '@core/Dom';
 import {ExcelComponent} from '@core/ExcelComponent';
 
 export class Header extends ExcelComponent {
   static className = 'excel__header';
 
+  constructor($root, options) {
+    super($root, {
+      name: 'Header',
+      listeners: ['input'],
+      ...options,
+    });
+  }
+
+  beforeInit() {
+    super.beforeInit();
+    this.onInput = debounce(this.onInput.bind(this), 300);
+  }
+
   toHTML() {
-    return `<input class="input" type="text" placeholder="New table">
+    return createHeader(this.store.getState());
+  }
 
-            <div class="buttons">
-                <div class="button">
-                    <i class="material-icons">delete</i>
-                </div>
-
-                <div class="button">
-                    <i class="material-icons">exit_to_app</i>
-                </div>
-            </div>
-    `;
+  onInput(event) {
+    const title = $(event.target).value;
+    this.$dispatch(actionHeaderUpdate(title));
   }
 }

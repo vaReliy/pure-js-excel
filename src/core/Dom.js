@@ -21,6 +21,14 @@ class Dom {
     return this.$nativeElement.textContent.trim();
   }
 
+  attr(name, value) {
+    if (typeof value === 'string') {
+      this.$nativeElement.setAttribute(name, value);
+      return this;
+    }
+    return this.$nativeElement.getAttribute(name);
+  }
+
   clear() {
     this.html('');
     return this;
@@ -60,11 +68,22 @@ class Dom {
     return this.$nativeElement.dataset;
   }
 
+  get value() {
+    return this.$nativeElement.value;
+  }
+
   css(styles = {}) {
     Object.entries(styles).forEach(([key, value]) => {
       this.$nativeElement.style[key] = value;
     });
     return this;
+  }
+
+  getStyles(styleKeys = []) {
+    return styleKeys.reduce((result, key) => {
+      result[key] = this.$nativeElement.style[key];
+      return result;
+    }, {});
   }
 
   focus() {
