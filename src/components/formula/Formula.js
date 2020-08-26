@@ -1,3 +1,4 @@
+import {debounce} from '@/utils/utils';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -12,6 +13,11 @@ export class Formula extends ExcelComponent {
       subscribe: ['currentTextContent'],
       ...options,
     });
+  }
+
+  beforeInit() {
+    super.beforeInit();
+    this.onInput = debounce(this.onInput.bind(this), 300);
   }
 
   // init() {

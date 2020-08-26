@@ -14,6 +14,7 @@ import {
   actionTableStyleUpdate,
   actionTableTextUpdate,
 } from '@/redux/actions';
+import {debounce} from '@/utils/utils';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -32,6 +33,7 @@ export class Table extends ExcelComponent {
   beforeInit() {
     super.beforeInit();
     this.cellSelection = new CellSelection();
+    this.onInput = debounce(this.onInput.bind(this), 300);
   }
 
   init() {

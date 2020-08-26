@@ -1,5 +1,6 @@
 import {createHeader} from '@/components/header/header.template';
 import {actionHeaderUpdate} from '@/redux/actions';
+import {debounce} from '@/utils/utils';
 import {$} from '@core/Dom';
 import {ExcelComponent} from '@core/ExcelComponent';
 
@@ -12,6 +13,11 @@ export class Header extends ExcelComponent {
       listeners: ['input'],
       ...options,
     });
+  }
+
+  beforeInit() {
+    super.beforeInit();
+    this.onInput = debounce(this.onInput.bind(this), 300);
   }
 
   toHTML() {

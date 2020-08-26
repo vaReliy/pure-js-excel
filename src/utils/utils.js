@@ -31,3 +31,15 @@ export function isEqual(a, b) {
 export function camelToDashCase(string) {
   return string.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 }
+
+export function debounce(fn, delayTime) {
+  let timeout;
+  return function(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      fn(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, delayTime);
+  };
+}
