@@ -1,11 +1,10 @@
-export function createHeader(title) {
+export function createHeader(state) {
   return `
     <input
         class="input"
-        id="header"
         type="text"
         placeholder="New table"
-        value="${title || ''}">
+        value="${state.title || ''}">
 
     <div class="buttons">
         <div class="button">

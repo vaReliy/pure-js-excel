@@ -46,7 +46,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return getTemplateTable(30, this.store.getState().table);
+    return getTemplateTable(30, this.store.getState());
   }
 
   async resizeTable(event) {

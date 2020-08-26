@@ -76,12 +76,12 @@ function toColumn({index, char, width}) {
     `;
 }
 
-function toCell(rowId, tableState, styleData) {
+function toCell(rowId, state, styleData) {
   return ({index, char}) => {
     const columnId = index + 1;
-    const width = getWidth(tableState.size.col, index);
+    const width = getWidth(state.size.col, index);
     const id = `${columnId}:${rowId}`;
-    const content = tableState.cellData[id] || '';
+    const content = state.cellData[id] || '';
     const styles = styleData[id] || defaultStyles;
     return `<div
               class="cell"
@@ -113,16 +113,11 @@ function toTemplateString(styles) {
   }, '');
 }
 
-/**
- * @param {number} size
- * @param {TableState} tableState
- * @return {string}
- */
-export function getTemplateTable(size, tableState) {
+export function getTemplateTable(size, state) {
   const rows = [];
   const rowSize = CODES.range();
-  const sizeState = tableState.size;
-  const styleData = getCorrectCellStyleData(tableState.styleData);
+  const sizeState = state.size;
+  const styleData = getCorrectCellStyleData(state.styleData);
 
   const columnHeaders = new Array(rowSize)
       .fill('')
@@ -137,7 +132,7 @@ export function getTemplateTable(size, tableState) {
     const columnCells = new Array(rowSize)
         .fill('')
         .map(toChar)
-        .map(toCell(rowId, tableState, styleData))
+        .map(toCell(rowId, state, styleData))
         .join('');
 
     rows.push(createRow(rowId, columnCells, sizeState.row));

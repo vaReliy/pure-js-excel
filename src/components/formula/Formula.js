@@ -1,4 +1,3 @@
-import {Action} from '@/redux/action-type';
 import {$} from '@core/Dom';
 import {EventType} from '@core/event-type';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -9,18 +8,19 @@ export class Formula extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Formula',
-      listeners: ['input', 'click', 'keydown'],
-      subscribe: [Action.__INIT__, 'currentTextContent'],
+      listeners: ['input', 'keydown'],
+      subscribe: ['currentTextContent'],
       ...options,
     });
   }
 
-  $onInit(state) {
-    const {table} = state;
-    if (table) {
-      this.onCellContentUpdate(table.currentTextContent);
-    }
-  }
+  // init() {
+  //   super.init();
+  //   const state = this.store.getState();
+  //   if (state) {
+  //     this.onCellContentUpdate(state.currentTextContent); // todo
+  //   }
+  // }
 
   $onStoreChanges(changes) {
     this.onCellContentUpdate(changes['currentTextContent']);
@@ -38,10 +38,6 @@ export class Formula extends ExcelComponent {
       event.preventDefault();
       this.$emit(EventType.FORMULA.DONE);
     }
-  }
-
-  onClick(event) {
-    console.log('Formula onClick()', event); // fixme
   }
 
   onCellContentUpdate(text) {

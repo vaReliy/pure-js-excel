@@ -4,21 +4,16 @@ import {Header} from '@/components/header/Header';
 import {Table} from '@/components/table/Table';
 import {Toolbar} from '@/components/toolbar/Toolbar';
 import {rootReducer} from '@/redux/rootReducer';
-import {State} from '@/redux/state';
+import {defaultState} from '@/redux/state';
 import {storage} from '@/utils/utils';
 import {Store} from '@core/Store';
 import './scss/index.scss';
 
 const stateKey = 'excel-state';
-const appState = storage(stateKey) || new State();
+const appState = storage(stateKey) || defaultState;
 const store = new Store(rootReducer, appState);
 
-let isFirstHook = true;
 store.subscribe(state => {
-  if (isFirstHook) {
-    excel.$sendInitHook(state);
-    isFirstHook = false;
-  }
   console.log('APP', state); // fixme
   storage(stateKey, state);
 });

@@ -5,29 +5,26 @@ export function rootReducer(state, action) {
     case Action.__INIT__: return state;
     case Action.TABLE_RESIZE: {
       const {id, type, value} = action.data;
-      const {table} = state;
-      table.size[type] = table.size[type] || {};
-      table.size[type][id] = value;
-      return {...state, table};
+      state.size[type] = state.size[type] || {};
+      state.size[type][id] = value;
+      return {...state};
     }
     case Action.TABLE_TEXT_UPDATE: {
       const {cellData, currentTextContent} = action.data;
-      const {table} = state;
-      table.cellData = table.cellData || {};
-      table.cellData[cellData.id] = cellData.value;
-      table.currentTextContent = currentTextContent || '';
-      return {...state, table};
+      state.cellData = state.cellData || {};
+      state.cellData[cellData.id] = cellData.value;
+      state.currentTextContent = currentTextContent || '';
+      return {...state};
     }
     case Action.TABLE_STYLE_UPDATE: {
       const {id, value} = action.data;
-      const {table} = state;
-      table.styleData = table.styleData || {};
-      table.styleData[id] = value;
-      return {...state, table};
+      state.styleData = state.styleData || {};
+      state.styleData[id] = value;
+      return {...state};
     }
     case Action.HEADER_UPDATE: {
-      const header = {...action.data};
-      return {...state, header};
+      const title = action.data;
+      return {...state, title};
     }
     default: return state;
   }
