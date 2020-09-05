@@ -23,31 +23,48 @@ export function dashboardToHTML() {
 
 function buildTableList() {
   const keyList = findStorageKeysBy('excel:');
-  const noResults = `
+  return keyList.length ? templateList(keyList) : templateNoResults();
+}
+
+function templateNoResults() {
+  return `
     <div class="db__list-header">
         <p>No table was created yet.</p>
     </div>
   `;
+}
 
-  const template = list => `
+function templateList(list) {
+  return `
     <div class="db__list-header">
         <span>Name</span>
         <span>Updated</span>
     </div>
 
     <ul class="db__list">
-        ${buildList(list)}
+        ${buildList(keysToList(list))}
     </ul>
   `;
-
-  return keyList.length ? template(keyList) : noResults;
 }
 
-function buildList(keyList) {
-  let result = '';
+function keysToList(keyList) {
+  const list = [];
   keyList.forEach(key => {
     const id = key.split(':')[1];
     const {title, updatedAt} = storage(key);
+    list.push({id, title, updatedAt});
+  });
+
+  const sortByUpdatedAt = (a, b) => {
+    return b.updatedAt - a.updatedAt;
+  };
+  return list.sort(sortByUpdatedAt);
+}
+
+function buildList(list) {
+  let result = '';
+  list.forEach(item => {
+    const {id, title, updatedAt} = item;
     result += buildTableLi(id, title, updatedAt);
   });
   return result;

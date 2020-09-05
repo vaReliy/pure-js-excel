@@ -34,9 +34,6 @@ export class Header extends ExcelComponent {
     if ($target.data.type === 'button') {
       // todo: add confirm popup!
       this.$dispatch(actionRemoveTable());
-      setTimeout(() => {
-        window.location.assign('#dashboard');
-      }, 300);
     }
   }
 }

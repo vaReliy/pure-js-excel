@@ -58,3 +58,7 @@ export function debounce(fn, delayTime) {
     timeout = setTimeout(later, delayTime);
   };
 }
+
+export function redirectTo(location) {
+  window.location.assign(location);
+}

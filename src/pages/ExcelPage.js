@@ -6,7 +6,7 @@ import {Toolbar} from '@/components/toolbar/Toolbar';
 import {Page} from '@/pages/Page';
 import {rootReducer} from '@/redux/rootReducer';
 import {defaultState} from '@/redux/state';
-import {debounce, removeStorageBy, storage} from '@/utils/utils';
+import {debounce, redirectTo, removeStorageBy, storage} from '@/utils/utils';
 import {Store} from '@core/Store';
 
 export class ExcelPage extends Page {
@@ -21,6 +21,7 @@ export class ExcelPage extends Page {
         storage(stateKey, state);
       } else {
         removeStorageBy(stateKey);
+        redirectTo('#dashboard');
       }
     };
 
