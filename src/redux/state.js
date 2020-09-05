@@ -7,4 +7,5 @@ export const defaultState = {
   styleData: {},
   cellData: {},
   currentTextContent: {},
+  updatedAt: '',
 };

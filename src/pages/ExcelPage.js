@@ -11,7 +11,7 @@ import {Store} from '@core/Store';
 
 export class ExcelPage extends Page {
   getRoot() {
-    const stateKey = 'excel-state';
+    const stateKey = `excel:${this.params}`;
     const appState = storage(stateKey) || defaultState;
     const store = new Store(rootReducer, appState);
 

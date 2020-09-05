@@ -1,6 +1,8 @@
 import {Action} from '@/redux/action-type';
 
 export function rootReducer(state, action) {
+  state.updatedAt = Date.now();
+
   switch (action.type) {
     case Action.__INIT__: return state;
     case Action.TABLE_RESIZE: {

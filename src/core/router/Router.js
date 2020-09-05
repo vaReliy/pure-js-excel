@@ -24,12 +24,14 @@ export class Router {
   }
 
   getActivePageClass(path) {
+    if (path.startsWith('excel/')) {
+      return this.routes.excel;
+    }
+
     switch (path) {
       case '':
       case 'dashboard':
         return this.routes.dashboard;
-      case 'excel':
-        return this.routes.excel;
       default:
         return this.routes.notFound;
     }
@@ -38,7 +40,7 @@ export class Router {
   updatePageContent() {
     this.cleanPageContent();
     const ActivePageClass = this.getActivePageClass(ActiveRouter.path());
-    this.page = new ActivePageClass();
+    this.page = new ActivePageClass(ActiveRouter.param());
     this.$currentNode = this.page.getRoot();
     this.$pagePlaceholder.append(this.$currentNode);
     this.page.afterViewInit();
