@@ -5,6 +5,7 @@ export function rootReducer(state, action) {
 
   switch (action.type) {
     case Action.__INIT__: return state;
+    case Action.REMOVE_TABLE: return null;
     case Action.TABLE_RESIZE: {
       const {id, type, value} = action.data;
       state.size[type] = state.size[type] || {};

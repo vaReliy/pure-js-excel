@@ -21,6 +21,10 @@ export function storage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+export function removeStorageBy(key) {
+  localStorage.removeItem(key);
+}
+
 export function findStorageKeysBy(startsWith) {
   const keyList = [];
   for (let i = 0; i < localStorage.length; i++) {

@@ -28,3 +28,9 @@ export function actionHeaderUpdate(data) {
     data,
   };
 }
+
+export function actionRemoveTable() {
+  return {
+    type: Action.REMOVE_TABLE,
+  };
+}

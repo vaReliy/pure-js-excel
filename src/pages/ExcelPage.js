@@ -6,7 +6,7 @@ import {Toolbar} from '@/components/toolbar/Toolbar';
 import {Page} from '@/pages/Page';
 import {rootReducer} from '@/redux/rootReducer';
 import {defaultState} from '@/redux/state';
-import {debounce, storage} from '@/utils/utils';
+import {debounce, removeStorageBy, storage} from '@/utils/utils';
 import {Store} from '@core/Store';
 
 export class ExcelPage extends Page {
@@ -17,7 +17,11 @@ export class ExcelPage extends Page {
 
     const stateListener = state => {
       console.log('APP', state); // fixme
-      storage(stateKey, state);
+      if (state) {
+        storage(stateKey, state);
+      } else {
+        removeStorageBy(stateKey);
+      }
     };
 
     store.subscribe(debounce(stateListener, 300));

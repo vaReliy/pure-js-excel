@@ -1,5 +1,5 @@
 import {createHeader} from '@/components/header/header.template';
-import {actionHeaderUpdate} from '@/redux/actions';
+import {actionHeaderUpdate, actionRemoveTable} from '@/redux/actions';
 import {debounce} from '@/utils/utils';
 import {$} from '@core/Dom';
 import {ExcelComponent} from '@core/ExcelComponent';
@@ -10,7 +10,7 @@ export class Header extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Header',
-      listeners: ['input'],
+      listeners: ['input', 'click'],
       ...options,
     });
   }
@@ -27,5 +27,16 @@ export class Header extends ExcelComponent {
   onInput(event) {
     const title = $(event.target).value;
     this.$dispatch(actionHeaderUpdate(title));
+  }
+
+  onClick(event) {
+    const $target = $(event.target);
+    if ($target.data.type === 'button') {
+      // todo: add confirm popup!
+      this.$dispatch(actionRemoveTable());
+      setTimeout(() => {
+        window.location.assign('#dashboard');
+      }, 300);
+    }
   }
 }
