@@ -8,24 +8,49 @@ export class Router {
     }
     this.routes = routes;
     this.$pagePlaceholder = $(selector);
+    this.$currentNode = null;
+    this.page = null;
     this.onHashChange = this.onHashChange.bind(this);
     this.init();
   }
 
   init() {
     window.addEventListener('hashchange', this.onHashChange);
-
-    console.log('current hash is', ActiveRouter.path()); // fixme
-    // const ActivePageClass = this.routes.excel;
-    // const ActivePageClass = this.routes.dashboard;
-    const ActivePageClass = this.routes.notFound;
-    this.page = new ActivePageClass();
-    this.$pagePlaceholder.append(this.page.getRoot());
-    this.page.afterViewInit();
+    this.onHashChange();
   }
 
   onHashChange() {
-    console.log(ActiveRouter.path()); // fixme
+    this.updatePageContent();
+  }
+
+  getActivePageClass(path) {
+    switch (path) {
+      case '':
+      case 'dashboard':
+        return this.routes.dashboard;
+      case 'excel':
+        return this.routes.excel;
+      default:
+        return this.routes.notFound;
+    }
+  }
+
+  updatePageContent() {
+    this.cleanPageContent();
+    const ActivePageClass = this.getActivePageClass(ActiveRouter.path());
+    this.page = new ActivePageClass();
+    this.$currentNode = this.page.getRoot();
+    this.$pagePlaceholder.append(this.$currentNode);
+    this.page.afterViewInit();
+  }
+
+  cleanPageContent() {
+    if (this.page) {
+      this.page.destroy();
+    }
+    if (this.$currentNode) {
+      this.$currentNode.clear();
+    }
   }
 
   destroy() {
@@ -34,5 +59,7 @@ export class Router {
       this.page.destroy();
     }
     this.$pagePlaceholder = null;
+    this.$currentNode = null;
+    this.page = null;
   }
 }

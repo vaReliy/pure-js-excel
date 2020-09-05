@@ -3,8 +3,7 @@ import {$} from '@core/Dom';
 
 export class DashboardPage extends Page {
   getRoot() {
-    this.context = $.create('div', 'db');
-    return this.context.html(`
+    return $.create('div', 'db').html(`
       <div class="db__header">
             <h1>Pure JS Excel</h1>
         </div>
@@ -35,9 +34,5 @@ export class DashboardPage extends Page {
             </ul>
         </div>
     `);
-  }
-
-  destroy() {
-    this.context = null; // fixme
   }
 }

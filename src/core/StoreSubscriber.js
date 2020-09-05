@@ -17,7 +17,7 @@ export class StoreSubscriber {
   }
 
   unsubscribeComponents() {
-    this.unsubscriber.unsubscribe();
+    this.unsubscriber();
   }
 }
 

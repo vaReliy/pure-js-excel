@@ -22,19 +22,20 @@ export class ExcelPage extends Page {
 
     store.subscribe(debounce(stateListener, 300));
 
-    this.context = new Excel({
+    this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
       store,
     });
-    return this.context.getRoot();
+    return this.excel.getRoot();
   }
 
   afterViewInit() {
     super.afterViewInit();
-    this.context.render();
+    this.excel.render();
   }
 
   destroy() {
     super.destroy();
+    this.excel.destroy();
   }
 }
