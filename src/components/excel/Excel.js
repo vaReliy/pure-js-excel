@@ -30,17 +30,10 @@ export class Excel {
   render() {
     this.components.forEach(component => component.init());
     this.subscriber.subscribeComponents(this.components);
-    // this.destroyAfterDelay(10000); // fixme
   }
 
   destroy() {
     this.subscriber.unsubscribeComponents();
     this.components.forEach(component => component.destroy());
-  }
-
-  destroyAfterDelay(ms) {
-    setTimeout(() => {
-      this.destroy();
-    }, ms);
   }
 }

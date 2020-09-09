@@ -58,3 +58,11 @@ export function debounce(fn, delayTime) {
     timeout = setTimeout(later, delayTime);
   };
 }
+
+export function isProductionMode() {
+  return process.env.NODE_ENV === 'production';
+}
+
+export function preventDefault(event) {
+  event.preventDefault();
+}

@@ -6,7 +6,12 @@ import {Toolbar} from '@/components/toolbar/Toolbar';
 import {Page} from '@/pages/Page';
 import {rootReducer} from '@/redux/rootReducer';
 import {defaultState} from '@/redux/state';
-import {debounce, removeStorageBy, storage} from '@/utils/utils';
+import {
+  debounce,
+  isProductionMode, preventDefault,
+  removeStorageBy,
+  storage,
+} from '@/utils/utils';
 import {ActiveRouter} from '@core/router/ActiveRouter';
 import {Store} from '@core/Store';
 
@@ -17,7 +22,9 @@ export class ExcelPage extends Page {
     const store = new Store(rootReducer, appState);
 
     const stateListener = state => {
-      console.log('APP', state); // fixme
+      if (!isProductionMode()) {
+        console.log('redux:', state);
+      }
       if (state) {
         storage(stateKey, state);
       } else {
@@ -37,11 +44,15 @@ export class ExcelPage extends Page {
 
   afterViewInit() {
     super.afterViewInit();
+    if (isProductionMode()) {
+      window.addEventListener('contextmenu', preventDefault);
+    }
     this.excel.render();
   }
 
   destroy() {
     super.destroy();
+    window.removeEventListener('contextmenu', preventDefault);
     this.excel.destroy();
   }
 }
