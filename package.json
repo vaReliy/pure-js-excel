@@ -5,6 +5,8 @@
   "browserslist": "> 0.25%, not dead",
   "main": "index.js",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "cross-env NODE_ENV=development webpack-dev-server",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "lint": "npx eslint ./src"
@@ -23,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/vaReliy/pure-js-excel/issues"
   },
-  "homepage": "https://github.com/vaReliy/pure-js-excel#readme",
+  "homepage": "https://github.com/vaReliy/pure-js-excel",
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
@@ -37,6 +39,7 @@
     "eslint": "^7.5.0",
     "eslint-config-google": "^0.14.0",
     "eslint-loader": "^4.0.2",
+    "gh-pages": "^3.1.0",
     "html-webpack-plugin": "^4.3.0",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
