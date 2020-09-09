@@ -1,5 +1,4 @@
 import {CellSelection} from '@/components/table/CellSelection';
-// eslint-disable-next-line max-len
 import {
   cellIdMatrix,
   closestCellId,
@@ -96,7 +95,6 @@ export class Table extends ExcelComponent {
       const id = closestCellId(event.key, targetCellId);
       const $closestCell = this.$root.findNode(`[data-id="${id}"]`);
       if ($closestCell && $closestCell.$nativeElement) {
-        // fixme: $nativeElement - check for table max cell values range
         this.selectCellUpdate($closestCell);
       }
     }

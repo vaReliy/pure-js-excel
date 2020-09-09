@@ -1,4 +1,5 @@
 export function createHeader(state) {
+  const meta = 'data-type="button"';
   return `
     <input
         class="input"
@@ -7,12 +8,12 @@ export function createHeader(state) {
         value="${state.title || ''}">
 
     <div class="buttons">
-        <div class="button">
-            <i class="material-icons">delete</i>
+        <div class="button" ${meta}>
+            <i class="material-icons" ${meta}>delete</i>
         </div>
 
         <div class="button">
-            <i class="material-icons">exit_to_app</i>
+            <a href="#dashboard"><i class="material-icons">exit_to_app</i></a>
         </div>
     </div>
   `;

@@ -21,6 +21,21 @@ export function storage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+export function removeStorageBy(key) {
+  localStorage.removeItem(key);
+}
+
+export function findStorageKeysBy(startsWith) {
+  const keyList = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith(startsWith)) {
+      keyList.push(key);
+    }
+  }
+  return keyList;
+}
+
 export function isEqual(a, b) {
   if (typeof a === 'object' && typeof b === 'object') {
     return JSON.stringify(a) === JSON.stringify(b);
@@ -42,4 +57,12 @@ export function debounce(fn, delayTime) {
     clearTimeout(timeout);
     timeout = setTimeout(later, delayTime);
   };
+}
+
+export function isProductionMode() {
+  return process.env.NODE_ENV === 'production';
+}
+
+export function preventDefault(event) {
+  event.preventDefault();
 }

@@ -17,11 +17,14 @@ export class StoreSubscriber {
   }
 
   unsubscribeComponents() {
-    this.unsubscriber.unsubscribe();
+    this.unsubscriber();
   }
 }
 
 function detectChanges(state, prevState, components) {
+  if (!state) {
+    return;
+  }
   Object.keys(state).forEach(key => {
     if (!isEqual(prevState[key], state[key])) {
       components.forEach(component => {

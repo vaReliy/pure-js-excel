@@ -1,8 +1,11 @@
 import {Action} from '@/redux/action-type';
 
 export function rootReducer(state, action) {
+  state.updatedAt = Date.now();
+
   switch (action.type) {
     case Action.__INIT__: return state;
+    case Action.REMOVE_TABLE: return null;
     case Action.TABLE_RESIZE: {
       const {id, type, value} = action.data;
       state.size[type] = state.size[type] || {};
