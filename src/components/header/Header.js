@@ -32,8 +32,10 @@ export class Header extends ExcelComponent {
   onClick(event) {
     const $target = $(event.target);
     if ($target.data.type === 'button') {
-      // todo: add confirm popup!
-      this.$dispatch(actionRemoveTable());
+      const decision = confirm('Do you want to delete this table?');
+      if (decision) {
+        this.$dispatch(actionRemoveTable());
+      }
     }
   }
 }

@@ -6,7 +6,8 @@ import {Toolbar} from '@/components/toolbar/Toolbar';
 import {Page} from '@/pages/Page';
 import {rootReducer} from '@/redux/rootReducer';
 import {defaultState} from '@/redux/state';
-import {debounce, redirectTo, removeStorageBy, storage} from '@/utils/utils';
+import {debounce, removeStorageBy, storage} from '@/utils/utils';
+import {ActiveRouter} from '@core/router/ActiveRouter';
 import {Store} from '@core/Store';
 
 export class ExcelPage extends Page {
@@ -21,7 +22,7 @@ export class ExcelPage extends Page {
         storage(stateKey, state);
       } else {
         removeStorageBy(stateKey);
-        redirectTo('#dashboard');
+        ActiveRouter.navigate('#dashboard');
       }
     };
 
